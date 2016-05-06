@@ -6,9 +6,13 @@ Knowledge and proficiency in bioinformatics is more important than ever in this 
 ###The learning objectives are:
 >
 Become familiar with working with big data sets (“-omics”), emphasis on microbial genomics
-Exposure to the most recent bioinformatic programs
-Ability to work in a UNIX environment, command-line, executing programs
-Literacy in file structure of big data sets
-RNA-seq analysis in *Haloarchaea*
 
+Exposure to the most recent bioinformatic programs
+
+Ability to work in a UNIX environment, command-line, executing programs
+
+Literacy in file structure of big data sets
+
+RNA-seq analysis in *Haloarchaea*
+>
 
