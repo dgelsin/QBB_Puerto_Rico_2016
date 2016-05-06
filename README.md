@@ -67,9 +67,9 @@ Another great resource of scientific software is found on one of my professor's,
 Simon Anders, Davis J McCarthy, Yunshun Chen, Michal Okoniewski, Gordon K Smyth,
 Wolfgang Huber & Mark D Robinson
 
-#Module 1: Introduction and Quality Control of RNA-seq .fastq Reads
+#*Module 1: Introduction and Quality Control of RNA-seq .fastq Reads*
+[[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
+#*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
 
-#Module 2: RNA-seq Alignment, Transcript Assembly, and Processing
-
-#Module 3: RNA-seq Differential Expression Analysis and Visualization
+#*Module 3: RNA-seq Differential Expression Analysis and Visualization*
 
