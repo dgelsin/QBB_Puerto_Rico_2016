@@ -25,11 +25,8 @@ This virtual box .img has Ubuntu v. installed, along with the whole skew of prog
 After setting up a Unix-based (Mac/Linux) environment, I need the following software to teach RNA-seq analysis:
 
 > - Homebrew: [Mac Version](http://brew.sh/) [Linux Version](http://linuxbrew.sh/)
-
 > - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-
 > - [Python 2.7.1](https://www.python.org/download/releases/2.7.1/)
-
 > - [Pip](https://pip.pypa.io/en/stable/installing/)
 
 *Installing the first 4 bolded software will make it very easy to install everything else. With homebrew, you can install most of the other software using `brew install <name_of_program>` by tapping into the [science homebrew github page](https://github.com/Homebrew/homebrew-science)*
