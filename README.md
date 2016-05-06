@@ -62,3 +62,14 @@ Another great resource of scientific software is found on one of my professor's,
 > - *Haloferax volcanii* RNA-seq raw reads: 
 > `wget `
 
+#Literature
+[Count-based differential expression analysis of RNA sequencing data using R and Bioconductor](http://www.nature.com/nprot/journal/v8/n9/pdf/nprot.2013.099.pdf)
+Simon Anders, Davis J McCarthy, Yunshun Chen, Michal Okoniewski, Gordon K Smyth,
+Wolfgang Huber & Mark D Robinson
+
+#Module 1: Introduction and Quality Control of RNA-seq .fastq Reads
+
+#Module 2: RNA-seq Alignment, Transcript Assembly, and Processing
+
+#Module 3: RNA-seq Differential Expression Analysis and Visualization
+
