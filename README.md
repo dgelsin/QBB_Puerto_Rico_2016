@@ -24,45 +24,49 @@ This virtual box .img has Ubuntu v. installed, along with the whole skew of prog
 
 After setting up a Unix-based (Mac/Linux) environment, I need the following software to teach RNA-seq analysis:
 
-Homebrew: [Mac Version](http://brew.sh/) [Linux Version](http://linuxbrew.sh/)
+> - Homebrew: [Mac Version](http://brew.sh/) [Linux Version](http://linuxbrew.sh/)
 
-[Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+> - [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-[Python 2.7.1](https://www.python.org/download/releases/2.7.1/)
+> - [Python 2.7.1](https://www.python.org/download/releases/2.7.1/)
 
-[Pip](https://pip.pypa.io/en/stable/installing/)
+> - [Pip](https://pip.pypa.io/en/stable/installing/)
 
 *Installing the first 4 bolded software will make it very easy to install everything else. With homebrew, you can install most of the other software using `brew install <name_of_program>` by tapping into the [science homebrew github page](https://github.com/Homebrew/homebrew-science)*
 
 **RNA-seq analysis software:**
 
-[Samtools](http://www.htslib.org/)
-[HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
-[Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
-[EDGEpro](http://ccb.jhu.edu/software/EDGE-pro/)
-[Cufflinks](http://cole-trapnell-lab.github.io/cufflinks/getting_started/)
+> - [Samtools](http://www.htslib.org/)
 
-[Trim_galore](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
+> - [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
 
-[Stringtie](https://ccb.jhu.edu/software/stringtie/)
+> - [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
 
-[BEDtools](http://bedtools.readthedocs.org/en/latest/content/installation.html)
+> - [EDGEpro](http://ccb.jhu.edu/software/EDGE-pro/)
 
-[BLAST](http://www.ncbi.nlm.nih.gov/books/NBK279690/)
+> - [Cufflinks](http://cole-trapnell-lab.github.io/cufflinks/getting_started/)
 
-[Gffcompare](https://ccb.jhu.edu/software/stringtie/gff.shtml)
+> - [Trim_galore](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
 
-[HTSeq](http://www-huber.embl.de/HTSeq/doc/install.html#install)
+> - [Stringtie](https://ccb.jhu.edu/software/stringtie/)
 
-[Salmon](http://salmon.readthedocs.org/en/latest/building.html#installation)
+> - [BEDtools](http://bedtools.readthedocs.org/en/latest/content/installation.html)
 
-[R](https://www.r-project.org/)
+> - [BLAST](http://www.ncbi.nlm.nih.gov/books/NBK279690/)
 
-[DEseq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
+> - [Gffcompare](https://ccb.jhu.edu/software/stringtie/gff.shtml)
 
-[IGV](https://www.broadinstitute.org/software/igv/log-in) *you must register for free*
+> - [HTSeq](http://www-huber.embl.de/HTSeq/doc/install.html#install)
 
-[Sleuth](https://github.com/pachterlab/sleuth)
+> - [Salmon](http://salmon.readthedocs.org/en/latest/building.html#installation)
+
+> - [R](https://www.r-project.org/)
+
+> - [DEseq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
+
+> - [IGV](https://www.broadinstitute.org/software/igv/log-in) *you must register for free*
+
+> - [Sleuth](https://github.com/pachterlab/sleuth)
 
 Another great resource of scientific software is found on one of my professor's, Dr. James Taylor, [github page](https://github.com/jxtx/mac-dev-playbook) ---> this is Mac specific though.
 
