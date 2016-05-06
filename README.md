@@ -37,13 +37,9 @@ Homebrew: [Mac Version](http://brew.sh/) [Linux Version](http://linuxbrew.sh/)
 **RNA-seq analysis software:**
 
 [Samtools](http://www.htslib.org/)
-
 [HISAT2](https://ccb.jhu.edu/software/hisat2/index.shtml)
-
 [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
-
 [EDGEpro](http://ccb.jhu.edu/software/EDGE-pro/)
-
 [Cufflinks](http://cole-trapnell-lab.github.io/cufflinks/getting_started/)
 
 [Trim_galore](http://www.bioinformatics.babraham.ac.uk/projects/trim_galore/)
