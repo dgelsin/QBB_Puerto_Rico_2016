@@ -49,6 +49,7 @@ After setting up a Unix-based (Mac/Linux) environment, I need the following soft
 > - [DEseq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
 > - [IGV](https://www.broadinstitute.org/software/igv/log-in) *you must register for free*
 > - [Sleuth](https://github.com/pachterlab/sleuth)
+> - [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
 
 Another great resource of scientific software is found on one of my professor's, Dr. James Taylor, [github page](https://github.com/jxtx/mac-dev-playbook) ---> this is Mac specific though.
 
