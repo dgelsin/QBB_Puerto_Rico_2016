@@ -54,7 +54,7 @@ Another great resource of scientific software is found on one of my professor's,
 
 #Data
 
-[*Haloferax volcanii* NCBI reference genome](ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.fna.gz)
-[*Haloferax volcanii* NCBI reference gene annotations](ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.gff.gz)
-[*Haloferax volcanii* RNA-seq raw reads]
+> - *Haloferax volcanii* NCBI reference genome: `wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.fna.gz`
+> - *Haloferax volcanii* NCBI reference gene annotations: `wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.gff.gz`
+> - *Haloferax volcanii* RNA-seq raw reads: `wget `
 
