@@ -71,24 +71,44 @@ Wolfgang Huber & Mark D Robinson
 [[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
 
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
-
+We will be doing a reference-based RNA-seq alignment analysis today. Inherent in this, we require a reference genome to do this sort of analysis. Fortunately, the *Haloferax volcanii* genome has been sequenced. Not everyone is so lucky, and because so few genomes are actually sequenced and annotated there are reference-indepenedent approaches as well (ie *de novo* assembly of transcripts) but this is beyond the scope of this workshop.
 
 ###*Step 1: Filter out Ribosomal RNA reads*
+So we've got our reads trimmed of adapters and quality filtered but there is another filtering step required: removal of rRNA reads. You might ask, 
+"Why worry about rRNA?" In all of life as we know it, rRNA is the most transcribed RNA species in the cell. It can attribute for as much as 90% of total RNA in a cell! Moreover, rRNA is typically constituitively expressed at high-levels regardless of growth state (translation is occuring all the time). Because of this skew in rRNA abundance, a typical RNA-seq run will result in ~90% of total reads mapping to rRNA. Now-a-days bioinformaticians do not need worry about rRNA due to awesome techniques in removing rRNA during the library preparation stage (see Illumina Ribo-zero kit), effectively depleting rRNA levels to <1% and saving all your sequence reads to target mRNA and other RNA species! Unfortunately, these techniques are well established for Bacteria and Eukarya but not for Archaea... :( 
+
+A couple of other reasons to remove rRNA, more important to bioinformatic analysis, is that something as highly expressed as rRNA can mask expression of more lowly expressed RNA species. So our first task in our RNA-seq adventure is to remove rRNA from our reads. We will do this by mapping our reads to 5S, 16S, and 23S rRNA. Let's pull some reference files from NCBI:
 
 **Get rRNA fasta files**
-> '$ wget '
+> `Open Chrome.app and go to 
 
 **Build rRNA hisat2 index**
 > `$ hisat2-build ../Desktop/HFX_rRNA/HFX_all_rRNA.fa ../Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA`
 
-
-**Align reads to rRNA one read pair at a time and extract reads that do not align (eg mRNA)**
+**Align reads to rRNA & extract reads that do not align (eg mRNA)**
+Next we will align our reads against the HFX rRNAs, effectively "sticking" our rRNA reads onto an alignment file (.sam), and allowing all the other reads that don't map to rRNA to "flow" pass and allow us to capture them. Since this is a paired-end RNA-seq data set we will have to map each mate pair separately (ie Read1, Read2).
 
 Read1:
-> `$ hisat2 --verbose --un /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_removed_trimmed_reads/HFX_O1_IR_HTSeq_subsample.py_rRNA_removed_reads_1.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA -U /Users/DRG/QBB_Puerto_Rico_2016_testdata/HTSeq_subsample.py_reads/trimmed/O1_mRNA_10percent_subsample_trimmed_1.fq -S /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_alignments/HFX_O1_mRNA_rRNA_mapped_hisat2_HTSeq_subsample.py_alignment_R1.sam`
+> `$ hisat2 --verbose --un /path/to/read1_rRNA_removed.fq`
+First we are calling hisat2 on the command line and beginning to use options the program has. To see all the options run hisat2 --help. We want to set the option *--un* to return unaligned reads (ie our mRNA and other RNAs) and the pathway to the directory where we want our rRNA filtered reads to be written
 
-Read2:
-> `$ hisat2 --verbose --un /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_removed_trimmed_reads/HFX_O1_IR_HTSeq_subsample.py_rRNA_removed_reads_1.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA -U /Users/DRG/QBB_Puerto_Rico_2016_testdata/HTSeq_subsample.py_reads/trimmed/O1_mRNA_10percent_subsample_trimmed_2.fq -S /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_alignments/HFX_O1_mRNA_rRNA_mapped_hisat2_HTSeq_subsample.py_alignment_R2.sam`
+> `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq *--no-spliced-alignment*` 
+A great option we want to specify for Prokaryotic (sorry for the *archaic* term ;) but microbial is not appropriate to say) RNA-seq analysis is to block the aligner from looking for splice sites. There is usually no splicing in Bacteria and Archaea.
+
+> `hisat2 --verbose --un /path/to/read1.fq --no-spliced-alignment *--rna-strandness RF*`
+We want to set the *--rna-strandness RF* option because this is strand-specific RNA-seq data. RNA-seq on its own does not preserve strand specificity of transcripts, but wizards have developed trickery to preserve the orientation of transcripts (ie dUTP method). How do we know whether to specificy RF or FR? Follow the rabbit hole of manual citations (hisat2 manual --> tophat2 manual).
+ 
+> `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF *--dta -I 0 -X 500*`
+Some more important options: *--dta is an option to put to make sure the output data is in the correct format to be piped into a transcript assembler stringtie (which we will be using). *-I and -X* are options specific to the insert sizes of the reads. This is information you get from library prepartion (ie the average fragment size of your RNA). For this data, the average insert size is ~350 bp. Setting a bigger max insert size usually yields in better alignments but causes slower aligning. 
+
+> `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 *-x /path/to/hisat2/index/prefix -U /path/to/read1.fq*`
+Next we set the path to the hisat2 index we built earlier and the path to your first mate reads (Read1).
+
+> `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/index/prefix -U /path/to/read1.fq *-S /path/to/rRNA_alignment_R1.sam*`
+Lastly we'll set the output pathway to where we want our alignment file to be put (.sam file)
+
+Do the same for read2:
+> `$ hisat2 --verbose --un /path/to/read2_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/index/prefix -U /path/to/read2.fq -S /path/to/rRNA_alignment_R2.sam`
 
 
 **Synchronize paired-end files (thus removing singlets)**
@@ -112,7 +132,9 @@ Read2:
 > `$ samtools view -bS /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam > /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam`
 
 **Sort by coordinate & by name**
+
 coordinate:
+
 > `$ samtools sort /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.cordsorted.bam`
 
 name:
@@ -128,4 +150,6 @@ name:
 
 
 #*Module 3: RNA-seq Differential Expression Analysis and Visualization*
+
+
 
