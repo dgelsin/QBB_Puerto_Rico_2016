@@ -83,7 +83,10 @@ A couple of other reasons to remove rRNA, more important to bioinformatic analys
 > `Open Chrome.app and go to 
 
 **Build rRNA hisat2 index**
-> `$ hisat2-build ../Desktop/HFX_rRNA/HFX_all_rRNA.fa ../Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA`
+> `$ hisat2-build /path/to/HFX_NCBI_rRNA.fa /path/to/index/*prefix*`
+
+We first need to build an index of our rRNA reference sequences. The *prefix* can be anything you want, but usually something logical is best like *HFX_NCBI_rRNA*
+
 
 **Align reads to rRNA & extract reads that do not align (eg mRNA)**
 
