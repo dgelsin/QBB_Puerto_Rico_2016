@@ -86,25 +86,32 @@ A couple of other reasons to remove rRNA, more important to bioinformatic analys
 > `$ hisat2-build ../Desktop/HFX_rRNA/HFX_all_rRNA.fa ../Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA`
 
 **Align reads to rRNA & extract reads that do not align (eg mRNA)**
+
 Next we will align our reads against the HFX rRNAs, effectively "sticking" our rRNA reads onto an alignment file (.sam), and allowing all the other reads that don't map to rRNA to "flow" pass and allow us to capture them. Since this is a paired-end RNA-seq data set we will have to map each mate pair separately (ie Read1, Read2).
 
 Read1:
 > `$ hisat2 --verbose --un /path/to/read1_rRNA_removed.fq`
+
 First we are calling hisat2 on the command line and beginning to use options the program has. To see all the options run hisat2 --help. We want to set the option *--un* to return unaligned reads (ie our mRNA and other RNAs) and the pathway to the directory where we want our rRNA filtered reads to be written
 
 > `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq *--no-spliced-alignment*` 
+
 A great option we want to specify for Prokaryotic (sorry for the *archaic* term ;) but microbial is not appropriate to say) RNA-seq analysis is to block the aligner from looking for splice sites. There is usually no splicing in Bacteria and Archaea.
 
 > `hisat2 --verbose --un /path/to/read1.fq --no-spliced-alignment *--rna-strandness RF*`
+
 We want to set the *--rna-strandness RF* option because this is strand-specific RNA-seq data. RNA-seq on its own does not preserve strand specificity of transcripts, but wizards have developed trickery to preserve the orientation of transcripts (ie dUTP method). How do we know whether to specificy RF or FR? Follow the rabbit hole of manual citations (hisat2 manual --> tophat2 manual).
  
 > `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF *--dta -I 0 -X 500*`
+
 Some more important options: *--dta is an option to put to make sure the output data is in the correct format to be piped into a transcript assembler stringtie (which we will be using). *-I and -X* are options specific to the insert sizes of the reads. This is information you get from library prepartion (ie the average fragment size of your RNA). For this data, the average insert size is ~350 bp. Setting a bigger max insert size usually yields in better alignments but causes slower aligning. 
 
 > `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 *-x /path/to/hisat2/index/prefix -U /path/to/read1.fq*`
+
 Next we set the path to the hisat2 index we built earlier and the path to your first mate reads (Read1).
 
 > `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/index/prefix -U /path/to/read1.fq *-S /path/to/rRNA_alignment_R1.sam*`
+
 Lastly we'll set the output pathway to where we want our alignment file to be put (.sam file)
 
 Do the same for read2:
