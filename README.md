@@ -70,15 +70,18 @@ Wolfgang Huber & Mark D Robinson
 #*Module 1: Introduction and Quality Control of RNA-seq .fastq Reads*
 [[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
-> `##Build hisat2 index##
 
-hisat2-build ../Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa hisat2_HFX_genome_index_out/HFX_NCBI`
+##Build hisat2 index##
 
-> `##Align##
-hisat2 --verbose --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x hisat2_HFX_genome_index_out/HFX_NCBI -1 HTSeq_subsample.py_reads/trimmed/C1_mRNA_10percent_subsample_trimmed_1.fq  -2 HTSeq_subsample.py_reads/trimmed/C1_mRNA_10percent_subsample_trimmed_2.fq -S HFX_hisat2_practice_alignments/HFX_C1_mRNA_HTSeq_subsample_hisat2_alignment.sam`
+> `hisat2-build ../Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa hisat2_HFX_genome_index_out/HFX_NCBI`
 
-> `##Convert sam to bam##
-samtools view -bS /Users/DRG/QBB_Puerto_Rico_2016_testdata/HFX_hisat2_practice_alignments/HFX_C1_mRNA_HTSeq_subsample_hisat2_alignment.sam > /Users/DRG/QBB_Puerto_Rico_2016_testdata/HFX_hisat2_practice_alignments/HFX_C1_mRNA_HTSeq_subsample_hisat2_alignment.bam`
+##Align##
+
+> `hisat2 --verbose --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x hisat2_HFX_genome_index_out/HFX_NCBI -1 HTSeq_subsample.py_reads/trimmed/C1_mRNA_10percent_subsample_trimmed_1.fq  -2 HTSeq_subsample.py_reads/trimmed/C1_mRNA_10percent_subsample_trimmed_2.fq -S HFX_hisat2_practice_alignments/HFX_C1_mRNA_HTSeq_subsample_hisat2_alignment.sam`
+
+##Convert sam to bam##
+
+> `samtools view -bS /Users/DRG/QBB_Puerto_Rico_2016_testdata/HFX_hisat2_practice_alignments/HFX_C1_mRNA_HTSeq_subsample_hisat2_alignment.sam > /Users/DRG/QBB_Puerto_Rico_2016_testdata/HFX_hisat2_practice_alignments/HFX_C1_mRNA_HTSeq_subsample_hisat2_alignment.bam`
 
 
 #*Module 3: RNA-seq Differential Expression Analysis and Visualization*
