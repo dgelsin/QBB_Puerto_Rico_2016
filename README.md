@@ -73,7 +73,7 @@ Wolfgang Huber & Mark D Robinson
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
 
 
-###Filter out Ribosomal RNA reads
+##*Step 1: Filter out Ribosomal RNA reads*
 
 ###Get rRNA fasta files
 
@@ -92,7 +92,7 @@ Wolfgang Huber & Mark D Robinson
 > `python Downloads/Scripts-master/fastqCombinePairedEnd.py /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_1.fq /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_2.fq`
 
 
-###Align filtered reads against NCBI reference genome
+##*Step 2: Align filtered reads against NCBI reference genome*
 
 
 ###Build hisat2 NCBI refseq index##
@@ -103,6 +103,8 @@ Wolfgang Huber & Mark D Robinson
 ###Align filtered reads##
 > `hisat2 --verbose  --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/QBB_Puerto_Rico_2016_testdata/hisat2_HFX_genome_index_out/HFX_NCBI -1 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_1.fq_pairs_R1.fastq -2 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_2.fq_pairs_R2.fastq -S /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O2_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam`
 
+
+##*Step 3: Assemble transcripts from aligned reads and quantitate*
 
 ###Convert sam to bam##
 > `samtools view -bS /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam > /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam`
@@ -122,7 +124,6 @@ name:
 > `gffcompare -r /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff -s /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/gffcompare/HFX_IR_RNAseq_rRNA_removed_gffcompare -i /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/all_gtf_out_list.txt`
 
 > `cuffcompare -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/cuffcompare/HFX_IR_RNAseq3_rRNA_removed_cuffcompare -i /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_aligments/all_gtf_out_list.txt  -r /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff`
-
 
 
 
