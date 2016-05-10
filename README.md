@@ -73,57 +73,57 @@ Wolfgang Huber & Mark D Robinson
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
 
 
-##*Step 1: Filter out Ribosomal RNA reads*
+###*Step 1: Filter out Ribosomal RNA reads*
 
-###Get rRNA fasta files
+**Get rRNA fasta files**
+> '$ wget '
 
-###Build rRNA hisat2 index
-> `hisat2-build ../Desktop/HFX_rRNA/HFX_all_rRNA.fa ../Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA`
-
-
-###Align reads to rRNA one read pair at a time and extract reads that do not align (eg mRNA)
-
-> `hisat2 --verbose --un /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_removed_trimmed_reads/HFX_O1_IR_HTSeq_subsample.py_rRNA_removed_reads_1.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA -U /Users/DRG/QBB_Puerto_Rico_2016_testdata/HTSeq_subsample.py_reads/trimmed/O1_mRNA_10percent_subsample_trimmed_1.fq -S /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_alignments/HFX_O1_mRNA_rRNA_mapped_hisat2_HTSeq_subsample.py_alignment_R1.sam`
-
-> `hisat2 --verbose --un /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_removed_trimmed_reads/HFX_O1_IR_HTSeq_subsample.py_rRNA_removed_reads_1.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA -U /Users/DRG/QBB_Puerto_Rico_2016_testdata/HTSeq_subsample.py_reads/trimmed/O1_mRNA_10percent_subsample_trimmed_2.fq -S /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_alignments/HFX_O1_mRNA_rRNA_mapped_hisat2_HTSeq_subsample.py_alignment_R2.sam`
+**Build rRNA hisat2 index**
+> `$ hisat2-build ../Desktop/HFX_rRNA/HFX_all_rRNA.fa ../Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA`
 
 
-##Synchronize paired-end files (thus removing singlets)
-> `python Downloads/Scripts-master/fastqCombinePairedEnd.py /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_1.fq /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_2.fq`
+**Align reads to rRNA one read pair at a time and extract reads that do not align (eg mRNA)**
+
+Read1:
+> `$ hisat2 --verbose --un /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_removed_trimmed_reads/HFX_O1_IR_HTSeq_subsample.py_rRNA_removed_reads_1.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA -U /Users/DRG/QBB_Puerto_Rico_2016_testdata/HTSeq_subsample.py_reads/trimmed/O1_mRNA_10percent_subsample_trimmed_1.fq -S /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_alignments/HFX_O1_mRNA_rRNA_mapped_hisat2_HTSeq_subsample.py_alignment_R1.sam`
+
+Read2:
+> `$ hisat2 --verbose --un /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_removed_trimmed_reads/HFX_O1_IR_HTSeq_subsample.py_rRNA_removed_reads_1.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/Desktop/HFX_rRNA/hisat2_HFX_rRNA_index/HFX_NCBI_rRNA -U /Users/DRG/QBB_Puerto_Rico_2016_testdata/HTSeq_subsample.py_reads/trimmed/O1_mRNA_10percent_subsample_trimmed_2.fq -S /Users/DRG/QBB_Puerto_Rico_2016_testdata/rRNA_removed/rRNA_alignments/HFX_O1_mRNA_rRNA_mapped_hisat2_HTSeq_subsample.py_alignment_R2.sam`
 
 
-##*Step 2: Align filtered reads against NCBI reference genome*
+**Synchronize paired-end files (thus removing singlets)**
+> `$ python Downloads/Scripts-master/fastqCombinePairedEnd.py /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_1.fq /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_2.fq`
 
 
-###Build hisat2 NCBI refseq index##
-
-> `hisat2-build ../Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa hisat2_HFX_genome_index_out/HFX_NCBI`
+###*Step 2: Align filtered reads against NCBI reference genome*
 
 
-###Align filtered reads##
-> `hisat2 --verbose  --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/QBB_Puerto_Rico_2016_testdata/hisat2_HFX_genome_index_out/HFX_NCBI -1 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_1.fq_pairs_R1.fastq -2 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_2.fq_pairs_R2.fastq -S /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O2_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam`
+**Build hisat2 NCBI refseq index**
+> `$ hisat2-build ../Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa hisat2_HFX_genome_index_out/HFX_NCBI`
 
 
-##*Step 3: Assemble transcripts from aligned reads and quantitate*
+**Align filtered reads**
+> `$ hisat2 --verbose  --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/QBB_Puerto_Rico_2016_testdata/hisat2_HFX_genome_index_out/HFX_NCBI -1 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_1.fq_pairs_R1.fastq -2 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_2.fq_pairs_R2.fastq -S /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O2_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam`
 
-###Convert sam to bam##
-> `samtools view -bS /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam > /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam`
 
-###Sort by coordinate & by name
+###*Step 3: Assemble transcripts from aligned reads and quantitate*
+
+**Convert sam to bam**
+> `$ samtools view -bS /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam > /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam`
+
+**Sort by coordinate & by name**
 coordinate:
-> `samtools sort /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.cordsorted.bam`
+> `$ samtools sort /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.cordsorted.bam`
 
 name:
-> `samtools sort -n /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.namesorted`
+> `$ samtools sort -n /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.namesorted`
 
 
-###Assemble reads into transcripts and quantify abundance
-> `stringtie /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/cordsorted_bam/HFX_C1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.cordsorted -G /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_transcriptome_stringout.gtf -A /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_gene_abund.tab -C /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_cov_refs.gtf -m 30`
+**Assemble reads into transcripts and quantify abundance**
+> `$ stringtie /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/cordsorted_bam/HFX_C1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.cordsorted -G /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_transcriptome_stringout.gtf -A /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_gene_abund.tab -C /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_cov_refs.gtf -m 30`
 
-###Merge transcriptomes
-> `gffcompare -r /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff -s /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/gffcompare/HFX_IR_RNAseq_rRNA_removed_gffcompare -i /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/all_gtf_out_list.txt`
-
-> `cuffcompare -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/cuffcompare/HFX_IR_RNAseq3_rRNA_removed_cuffcompare -i /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_aligments/all_gtf_out_list.txt  -r /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff`
+**Merge transcriptomes**
+> `$ cuffcompare -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/cuffcompare/HFX_IR_RNAseq3_rRNA_removed_cuffcompare -i /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_aligments/all_gtf_out_list.txt  -r /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff`
 
 
 
