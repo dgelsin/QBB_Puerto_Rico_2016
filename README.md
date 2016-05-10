@@ -82,7 +82,7 @@ A couple of other reasons to remove rRNA, more important to bioinformatic analys
 **Get rRNA fasta files**
 > `Open Chrome.app and go to 
 
-**Build rRNA hisat2 index**
+*Build rRNA hisat2 index*
 > `$ hisat2-build /path/to/HFX_NCBI_rRNA.fa /path/to/index/*prefix*`
 
 We first need to build an index of our rRNA reference sequences. The *prefix* can be anything you want, but usually something logical is best like *HFX_NCBI_rRNA*
