@@ -1,7 +1,7 @@
 # QBB_Puerto_Rico_2016
 An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea
 
-Knowledge of and proficiency in bioinformatics are more important than ever in this day and age in biology. With the advent of high throughput and cheap sequencing technologies huge datasets are becoming more available. In order to work and parse through these datasets, a biologist needs to have a good familiarity with UNIX environments, scripting, and stastistics. While most of the ideas are the same between Eukaryotic and microbial bioinformatic analysis there are indeed some considerations to take and different software/pipelines to use to specifically study Bacteria and Archaea. This workshop is designed to introduce you to the field of bioinformatics and expose you to the tools available for microbial bioinformatic analysis (focusing on organisms from halophilic environments). The workshop is divided into three modules: 1) Quality control (QC) of raw sequence data, 2) RNA-seq alignment and quantitation 3) RNA-seq differential expression and visualization.
+Knowledge of and proficiency in bioinformatics are more important than ever in this day and age in biology. With the advent of high throughput and cheap sequencing technologies huge datasets are becoming more available. In order to work and parse through these datasets, a biologist needs to have a good familiarity with UNIX environments, scripting, and stastistics. While most of the ideas are the same between Eukaryotic and microbial bioinformatic analysis, there are indeed some considerations to take and different software/pipelines to use to specifically study Bacteria and Archaea. This workshop is designed to introduce you to the field of bioinformatics and expose you to the tools available for microbial bioinformatic analysis (focusing on organisms from halophilic environments). The workshop is divided into three modules: 1) Quality control (QC) of raw sequence data; 2) RNA-seq alignment and quantitation; and 3) RNA-seq differential expression and visualization.
 
 ###The learning objectives are:
 > - Become familiar with working with big data sets (“-omics”), emphasis on microbial genomics
@@ -129,12 +129,15 @@ Do the same for read2:
 Now that we have rRNA-clean reads, let us do the real alignment.
 
 **Build hisat2 NCBI refseq index**
-> `$ hisat2-build ../Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa hisat2_HFX_genome_index_out/HFX_NCBI`
+> `$ hisat2-build /path/to/HFX_NCBI_reference_genome.fa`
 
 
 **Align filtered reads**
-> `$ hisat2 --verbose  --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /Users/DRG/QBB_Puerto_Rico_2016_testdata/hisat2_HFX_genome_index_out/HFX_NCBI -1 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_1.fq_pairs_R1.fastq -2 /Users/DRG/Desktop/rRNA_removed_trimmed_reads/synched_reads/HFX_O2_IR_mRNA_rRNA_removed_2.fq_pairs_R2.fastq -S /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O2_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam`
+> `$ hisat2 --verbose  --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/HFX_index -1 /path/to/synced/rRNA-removed_read1.fq -2 /path/to/synced/rRNA-removed_read2.fq -S /path/to/rRNA-removed_hisat2_alignment.sam`
 
+You now have your first alignment file, which is in the .sam format. You can learn more about the format here: https://samtools.github.io/hts-specs/SAMv1.pdf
+
+> #Task #2
 
 ###*Step 3: Assemble transcripts from aligned reads and quantitate*
 
