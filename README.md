@@ -522,7 +522,7 @@ Now we want to visualize what this data looks like. We are looking at data with 
 
 > `> plotMA(dds,ylim=c(-2,2),main='Ionizing Radiation-induced D.E. of Genes in Haloferax volcanii')`
 
-![MAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_MAplot_sRNAlib_QBB_PuertoRico_2016.pdf)
+![MAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_MAplot_sRNAlib_QBB_PuertoRico_2016.compressed.pdf)
 
 To save a copy of the plot:
 > `> dev.copy(png,'deseq2_MAplot.png')`
@@ -534,7 +534,7 @@ If we want to see if the variation in our data matches the treatment we expect t
 
 > `> print(plotPCA(rld, intgroup=c('condition')))`
 
-![PCAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_PCA_sRNAlib_QBB_PuertoRico_2016.pdf)
+![PCAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_PCA_sRNAlib_QBB_PuertoRico_2016.compressed.pdf)
 
 > `> dev.copy(png,'deseq2_pca.png')`
 
