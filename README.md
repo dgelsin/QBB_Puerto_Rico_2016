@@ -441,14 +441,10 @@ To save a .txt file of the results from the D.E. analysis which can be viewed in
 
 ##Possible other things to do
 - Mess around with MAplot settings for a beautiful graph
-
-	-eg: mark lowest and highest expressed genes, most significant DE gene, etc
-
--Other plots: expression plots of highest/lowest genes, cluster heatmap
-
--Normalize for batch effect (variation other than treatment)
-
--Load alignments into a genome viewer to see what aligments look like visually (eg IGV)
+	- eg: mark lowest and highest expressed genes, most significant DE gene, etc
+- Other plots: expression plots of highest/lowest genes, cluster heatmap
+- Normalize for batch effect (variation other than treatment)
+- Load alignments into a genome viewer to see what aligments look like visually (eg IGV)
 
 
 
