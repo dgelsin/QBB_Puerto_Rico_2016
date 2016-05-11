@@ -90,6 +90,12 @@ Tools/commands for this section:
 
 `fastqCombinePairedEnd.py`
 
+`samtools`
+
+`stringtie`
+
+`cuffcompare`
+
 
 We will be doing a reference-based RNA-seq alignment analysis today. Inherent in this, we require a reference genome to do this sort of analysis. Fortunately, the *Haloferax volcanii* genome has been sequenced. Not everyone is so lucky, and because so few genomes are actually sequenced and annotated there are reference-indepenedent approaches as well (ie *de novo* assembly of transcripts) but this is beyond the scope of this workshop.
 
@@ -179,28 +185,105 @@ You now have your first alignment file, which is in the .sam format. You can lea
 
 ###*Step 3: Assemble transcripts from aligned reads and quantitate*
 
+Because Illumina reads are so short (<250 bp), the alignment of those reads to a reference genome does not directly tell us about the abundance of whole transcript. This is one of the hardest problems in RNA-seq software development: the assembly of mapped reads into full transcripts. In theory, it is very easy to imagine any overlap between where reads overlap can count as an assembled region and then you grow outwards from there. Paired-end reads make this job even easier by filling in gaps where there are no overlaps, but because of the orientation of the way the reads mapped you can confidently fill in the gap between mated pairs. 
+
+(R1) ---->    [[[[GAP]]]]     <----(R2)
+			-----------------
+			  Fill in gap
+
+Unfortunately, it is not so straightforward when you take into account 5' & 3' UTRs, operons, and truncated or elongated transcripts. Thus, assembling full transcripts is a guesstimate of the full length transcript and must be verified experimentally (ie northern blot). Our next task is to assemble full length transcripts from the aligned reads and then quantitate how many reads fall within the assembled transcript boundaries.
+
+We will be using one of the best transcript assemblers available called `stringtie` which was developed by in Dr. Steven Salzberg's lab. This is the succesor to cufflinks2. In order use `stringtie` with our alignments we have to convert the files into the correct file types.
+
 **Convert sam to bam**
 > `$ samtools view -bS /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam > /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam`
 
+Samtools is a great tool available for parsing and filtering aligned reads in .sam format. It has a whole host of options available and their manual warrants reading extensively: http://www.htslib.org/doc/samtools.html
+
+Samtools view allows use to convert .sam files into a .bam file, which is a binary format (and thus compressed) of a .sam file. Many tools require .bam format input.
+
 **Sort by coordinate & by name**
+Next, stringtie requires the aligned reads to be sorted by the coordinates in which they aligned onto the genome. For example, transcript A mapped to coordinates 1..400 on the Chromomsome while transcript B mapped to coordinates 550..637. We want to sort these reads in order: Transcript A, then Transcript B.
 
-coordinate:
+We will use another samtools command: `samtools sort`
 
-> `$ samtools sort /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.cordsorted.bam`
+To sort by coordinate:
 
-name:
-> `$ samtools sort -n /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/HFX_O1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.namesorted`
+> `$ samtools sort /path/to/alignment.bam -o /path/to/output/alignment.cordsorted.bam`
 
+For another tool to count the reads that fall under assembled transcripts (HTSeq-count) that we will use downstream, we need alignments that are sorted by name instead of coordinates. Let's take care of this now.
+
+To sort by name:
+> `$ samtools sort -n /path/to/alignment.bam -o /path/to/output/alignment.namesorted`
+
+Now we can assemble the transcripts based on the alignments and a reference annotation. `stringtie` calculates the coverage (ie the number of reads in a given area) and normalizes these counts into an expression value per assembled transcript termed RPKM/FPKM. This value stands for: *Fragments Per Kilobase of exon per Million reads*. This basically means it is expression of a transcript normalized by total length of the assembled transcript and normalized by the total size of the RNA-seq library, thus making it possible to compare Gene A in Sample 1 to Sample 2 even if Sample 1′s RNA-seq library has 60 million pairs of reads and Sample 2′s library has only 30 million pairs of reads. For further information: http://www.cureffi.org/2013/09/12/counts-vs-fpkms-in-rna-seq/
+
+'stringtie' essentially builds a transcriptome based on where reads have aligned in a tab-delimited format called .gtf. You will find this format or varients (.gff, .gff3) used practically all the time for reference gene annotations. We can also provide a reference transcriptome to help with the assembly calling, which we will do today to continue with our reference-based RNA-seq pipeline. 
+
+We will call `stringtie` with a few options to get out tab-delimited files of coverage `-C` and gene abundances `A`. It is worth noting that stringtie builds whole transcriptomes, meaning it will build transcripts for genes and anything else (ie non-coding RNA). We will ignore anything that is not a gene for today. We will also specify the minimum distance (30 nt in this case) allowed between two reads to be called a single transcript with `-m 30`. For more information on stringtie read the manual: https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual
 
 **Assemble reads into transcripts and quantify abundance**
-> `$ stringtie /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/bam_files/cordsorted_bam/HFX_C1_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.cordsorted -G /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_transcriptome_stringout.gtf -A /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_gene_abund.tab -C /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_cov_refs.gtf -m 30`
+> `$ stringtie /path/to/cordsorted.bam -G /path/to/reference_genome_annotation.gff -o /path/to/assemble_transcriptome_stringtie_out.gtf -A /path/to/gene_abund.tab -C /path/to/cov_refs.gtf -m 30`
+
+> #Task #3
+> All of these tasks must be done for each individual alignment in order to compare the expression between samples. Your task now is to:
+
+> 1. Convert alignments into file types usable in downstream transcript assembly and quantitation applications.
+
+> 2. Assemble transcriptome for each sample.
+
+> 3. Find the highest expressed gene in each sample. Hint: cut, sort
+
+> Answer thought question: what does an RPKM/FPKM value of 0 mean? How do you asses this?
+
+
+Now that we have the individual transcriptomes for each sample, we have to compare each transcriptome against one another to get a consensus transcriptome. We want to make sure we count reads that fall under transcripts that are present in all of the transcriptomes to make sure we don't miss anything. To do this we will use a tool called `cuffcompare`, which is also packaged as `gffcompare`.
+
+First we will need to make an accession file that contains the paths to each stringtie-built transcriptome. You can open a text editor like so: `nano`
+
+In the text editor you want to have a line for each transcriptome. Your file should look similar to this when done:
+> `./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_transcriptome_stringout.gtf
+./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C2_rRNA_removed_stringtie_out/HFX_C2_rRNA_removed_transcriptome_stringout.gtf
+./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C3_rRNA_removed_stringtie_out/HFX_C3_rRNA_removed_transcriptome_stringout.gtf
+./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_O1_rRNA_removed_stringtie_out/HFX_O1_rRNA_removed_transcriptome_stringout.gtf
+./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_O2_rRNA_removed_stringtie_out/HFX_O2_rRNA_removed_transcriptome_stringout.gtf
+./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_O3_rRNA_removed_stringtie_out/HFX_O3_rRNA_removed_transcriptome_stringout.gtf`
+
+To close the editor and save the file press `ctrl + x` --> press `y` to save --> name `gtf_acession_list.txt`
+
+Next to get a consensus trancriptome:
 
 **Merge transcriptomes**
-> `$ cuffcompare -o /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/cuffcompare/HFX_IR_RNAseq3_rRNA_removed_cuffcompare -i /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_aligments/all_gtf_out_list.txt  -r /Users/DRG/Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome.gff`
+> `$ cuffcompare -o /path/to/conensus_transcriptome_cuffcompare_output.gtf -i /path/to/gtf_acession_list.txt -r /path/to/reference_genome_gene_annotation.gtf`
 
+The output of this is a consensus transcriptome called `.combined.gtf` With the `r` option we compared out individual transcriptomes against the reference gene annotation, which gave a category code for each assembled transcript based on the relationship it has with the reference gene annotation. For example, if an assembled transcript STRG.1 matches a reference annotation it will be given a category code of "=". 
 
+A cheatsheat for category markers:
+> Class codes:
+
+> "u" is novel intergenic trancscript, (you may check that whether some of them could be expressing retro-viral elements).
+
+> "i" is intronic transcript (there are some intronic lncRNA and repetitive elements get expressed in cell-type specific manner)
+
+> "j"  is potential novel isoform (alternately spliced, since has no splice site match, you might check the coding potential)
+
+> "x" is cis-antisense transcript (exonic overlap but opposite strand)
+
+> "o" is "other overlap" - that is an exonic overlap with the reference transcript that doesn't fall in any other, "more interesting" overlap categories - e.g. no splice sites match ('j' class), no containment ('c' code) etc. These 'o' codes could be assigned, for example, to assembled single-exon fragments that happen to overlap one of the terminal exons of a reference transcript (but not enough to make it "contained")
+
+> "p" is "polymerase run" - it's supposed to signal that the relative positioning of the transcripts to the reference transcript suggests a potential polymerase read-through downstream of the 3' UTRs of the reference.  ( I would ignore it)
+
+> "=" is complete match.
+
+> "e" is single exon transfag with some basepairs of intron retention ( could be premRNA contaminant)
+
+Since we are focused on reference gene expression, we will only work with assembled transcripts that have the category code "=". To pull out these transcripts from everything else we will use the command `awk`. `awk` is extremely useful, but a full explanation and demonstration of how it works is far beyond the scope of this workshop so please just have faith and execute the command:
+
+awk '$22 ~ /=/ { print }' /path/to/consensus_transcriptome_combined.gtf > /path/to/consensus/transcriptome/genes_only.gtf
 
 #*Module 3: RNA-seq Differential Expression Analysis and Visualization*
+
+
 
 
 
