@@ -210,7 +210,7 @@ So we've got our reads trimmed of adapters and quality filtered but there is ano
 A couple of other reasons to remove rRNA, more important to bioinformatic analysis, is that something as highly expressed as rRNA can mask expression of more lowly expressed RNA species. So our first task in our RNA-seq adventure is to remove rRNA from our reads. We will do this by mapping our reads to 5S, 16S, and 23S rRNA. Let's pull some reference files from NCBI:
 
 **Get rRNA fasta files**
-We first need to get a .fa file with all rRNA sequences in *Haloferax volcanii*. How do we do this? [NCBI Gene Database](http://www.ncbi.nlm.nih.gov/gene/) is a good place to get fasta sequences of genes. Open it up in Chrome.app
+We first need to get a .fa file with all rRNA sequences in *Haloferax volcanii*. How do we do this? [NCBI Gene Database](http://www.ncbi.nlm.nih.gov/gene/) is a good place to get fasta sequences of genes. Open it up in Firefox.app
 
 ![NCBI_blank_page](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.25.06.png)
 
