@@ -281,7 +281,7 @@ You now have your first alignment file, which is in the .sam format. You can lea
 
 Take a look at it using `less -S`
 
-![less_-S_alignment.sam](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2001.28.28.png)
+![less_-S_alignment.sam](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2001.27.10.png)
 
 > #Task #2
 > You may have noticed that the reads started with a letter "C". This stands for control, meaning no treatment to *Haloferax volcanii*. The letter following "C" (eg C1, C2, C3) corresponds to a biological replicate. It is always important to do biological replicates to insure the change you are seeing is indeed real and not a one-time fluke. The reads starting with "O" are *Haloferax volcanii* that has been treated with ionizing radiation, thus causing oxidative stress (hence the "O"). Your task now is to:
