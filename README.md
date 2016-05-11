@@ -1,6 +1,8 @@
 # QBB Puerto Rico 2016
 An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
 
+![Puerto_Rico](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/puerto_rico_banner.png)
+
 Knowledge of and proficiency in bioinformatics are more important than ever in this day and age in biology. With the advent of high throughput and cheap sequencing technologies huge datasets are becoming more available. In order to work and parse through these datasets, a biologist needs to have a good familiarity with UNIX environments, scripting, and stastistics. While most of the ideas are the same between Eukaryotic and microbial bioinformatic analysis, there are indeed some considerations to take and different software/pipelines to use to specifically study Bacteria and Archaea. This workshop is designed to introduce you to the field of bioinformatics and expose you to the tools available for microbial bioinformatic analysis (focusing on organisms from halophilic environments). The workshop is divided into three modules: 1) Quality control (QC) of raw sequence data; 2) RNA-seq alignment and quantitation; and 3) RNA-seq differential expression and visualization.
 
 ###The learning objectives are:
@@ -511,6 +513,8 @@ Now we want to visualize what this data looks like. We are looking at data with 
 
 > `> plotMA(dds,ylim=c(-2,2),main='Ionizing Radiation-induced D.E. of Genes in Haloferax volcanii')`
 
+![MAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_MAplot_sRNAlib_QBB_PuertoRico_2016.pdf)
+
 To save a copy of the plot:
 > `> dev.copy(png,'deseq2_MAplot.png')`
 > `> dev.off()`
@@ -520,6 +524,8 @@ If we want to see if the variation in our data matches the treatment we expect t
 > `> rld<- rlogTransformation(dds, blind=TRUE)`
 
 > `> print(plotPCA(rld, intgroup=c('condition')))`
+
+![PCAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_PCA_sRNAlib_QBB_PuertoRico_2016.pdf)
 
 > `> dev.copy(png,'deseq2_pca.png')`
 
