@@ -207,11 +207,11 @@ A couple of other reasons to remove rRNA, more important to bioinformatic analys
 **Get rRNA fasta files**
 We first need to get a .fa file with all rRNA sequences in *Haloferax volcanii*. How do we do this? [NCBI Gene Database](http://www.ncbi.nlm.nih.gov/gene/) is a good place to get fasta sequences of genes. Open it up in Chrome.app
 
-![NCBI_blank_page]()
+![NCBI_blank_page](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.25.06.png)
 
 We can get the rRNA by searching the official abbreviation of *Haloferax volcanii*, HVO, followed by ribosomal RNA.
 
-![rRNA_search]()
+![rRNA_search](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.27.36.png)
 
 Click on one of the rRNA genes
 
@@ -223,7 +223,7 @@ Click FASTA
 
 Copy the sequence and header that begins with >
 
-![copy_seq]()
+![copy_seq](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.28.18.png)
 
 Go back to terminal and open up a text editor by executing `nano`. Paste the sequence in the blank page that comes up. Repeat this for the other rRNA genes.
 
