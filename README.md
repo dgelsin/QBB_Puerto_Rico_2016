@@ -213,13 +213,9 @@ We can get the rRNA by searching the official abbreviation of *Haloferax volcani
 
 ![rRNA_search](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.27.36.png)
 
-Click on one of the rRNA genes
+Click on one of the rRNA genes --> Click FASTA towards the bottom left
 
-![rRNA_single_gene]()
-
-Click FASTA
-
-![rRNA_fasta]()
+![rRNA_single_gene](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.27.58.png)
 
 Copy the sequence and header that begins with >
 
