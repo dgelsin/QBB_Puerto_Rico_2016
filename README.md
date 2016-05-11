@@ -74,9 +74,13 @@ Tools/commands for this section:
 `fastqc`
 `trim_galore`
 
-The first step a bioinformatician must do when getting back data from a sequencing facility is to assess the quality of the sequencing run. Many software are available for this task, but a particular favorite of mine is FastQC. We want to assess whether the reads are being based-called at a good enough quality, if there are any over-represented sequences that cloud the data (ie adapter sequences), the read length.
+The first step a bioinformatician must do when getting back data from a sequencing facility is to assess the quality of the sequencing run. Many software are available for this task, but a particular favorite of mine is FastQC. We want to assess whether the reads are being base-called at a good enough quality, if there are any over-represented sequences that cloud the data (ie adapter sequences), the read length, etc.
 
-First we will boot FastQC by opening the Terminal.app and running:
+First we will boot FastQC by opening the Terminal.app 
+
+![Terminal_example](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-06%2016.43.28.png)
+
+and running:
 > `$ fastqc`
 
 This will boot java and open a user interface for FastQC. Very easy to use.
@@ -88,6 +92,7 @@ Next we'll load in our fastq reads into fastQC to begin analysis. Let's start wi
 
 Let the data load. :shipit:
 
+![fastQC_overrepresented](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2001.24.48.png)
 
 Looking at the overrepresented sequences we find that there are still adapters present in the reads! This will affect final alignment since they are not a part of the actual genome.
 
@@ -104,6 +109,8 @@ xxxx = adapter2
 	      <------- (R2)
 
 	      Overlap!
+
+![reads_explanation](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/reads_explanation_figure.png)
 
 To remove adapter sequences from reads we will use the program `Trim_galore`:
 
@@ -131,6 +138,8 @@ Now let's compare what our adapter trimmed reads look like:
 
 File --> Open --> trimmed_reads.fq
 
+![trimmed_reads](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2001.21.34.png)
+
 Great the overepresented sequences are not the adapters! 
 
 > #Task #1
@@ -147,9 +156,6 @@ Everything else looks in order. QC is over and now it is time to start the RNA-s
 - [x] Module 1: Quality control of RNA-seq reads
 - [ ] Module 2: RNA-seq alignment and quantitation
 - [ ] Module 3: D.E. analysis & data visualization
-
-![GitHub Logo](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-10%2017.37.51.png)
-Format: ![Alt Text](url)
 
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
 
@@ -228,7 +234,11 @@ Lastly we'll set the output pathway to where we want our alignment file to be pu
 Do the same for read2:
 > `$ hisat2 --verbose --un /path/to/read2_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/index/prefix -U /path/to/read2.fq -S /path/to/rRNA_alignment_R2.sam`
 
-Let's take a look at what the reads look like. A terminal command to do this is `less /path/to/your/reads`. The format looks awful! Take a look at the man page for it `man less`. `less -S` allows us to view files in proper format. The reads look fine so far. Let's count how many reads there are in each file. `wc -l` allows us to count each line in a file. Remember, fastq files have four lines for each read so we have to divide the `wc -l` output by 4. Or you can do it all in one shot like so: `cat /path/to/you/reads | echo $((`wc -l`/4))
+Let's take a look at what the reads look like. A terminal command to do this is `less /path/to/your/reads`. The format looks awful! Take a look at the man page for it `man less`. `less -S` allows us to view files in proper format. The reads look fine so far. 
+
+![less_-S_reads.fq](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2001.28.28.png)
+
+Let's count how many reads there are in each file. `wc -l` allows us to count each line in a file. Remember, fastq files have four lines for each read so we have to divide the `wc -l` output by 4. Or you can do it all in one shot like so: `cat /path/to/you/reads | echo $((`wc -l`/4))
 
 The paired-end read files have different numbers of reads. This will cause problems when we try to align against the reference genome because the aligner is written to take paired-end reads that have equal numbers of mated pairs. Our next task is to synchronize these reads.
 
@@ -258,6 +268,10 @@ Get the reference genome files from NCBI:
 > `$ hisat2 --verbose  --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/HFX_index -1 /path/to/synced/rRNA-removed_read1.fq -2 /path/to/synced/rRNA-removed_read2.fq -S /path/to/rRNA-removed_hisat2_alignment.sam`
 
 You now have your first alignment file, which is in the .sam format. You can learn more about the format here: https://samtools.github.io/hts-specs/SAMv1.pdf
+
+Take a look at it using `less -S`
+
+![less_-S_alignment.sam](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2001.28.28.png)
 
 > #Task #2
 > You may have noticed that the reads started with a letter "C". This stands for control, meaning no treatment to *Haloferax volcanii*. The letter following "C" (eg C1, C2, C3) corresponds to a biological replicate. It is always important to do biological replicates to insure the change you are seeing is indeed real and not a one-time fluke. The reads starting with "O" are *Haloferax volcanii* that has been treated with ionizing radiation, thus causing oxidative stress (hence the "O"). Your task now is to:
@@ -400,7 +414,7 @@ Rather than an FPKM normalized approach for D.E. analysis, we will do a raw read
 
 `DESeq2` uses raw read counts to calculate differential expression, and for our purposes today that is a completely viable option for D.E. analysis. The input counts that `DESeq2` requires are created by a Python package written by Dr. Simon Anders called `HTSeq`.
 
-insert HTSeq count image
+![HTseq_count](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/count_modes.png)
 
 To count the reads you excute:
 
