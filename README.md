@@ -227,6 +227,8 @@ We will call `stringtie` with a few options to get out tab-delimited files of co
 **Assemble reads into transcripts and quantify abundance**
 > `$ stringtie /path/to/cordsorted.bam -G /path/to/reference_genome_annotation.gff -o /path/to/assemble_transcriptome_stringtie_out.gtf -A /path/to/gene_abund.tab -C /path/to/cov_refs.gtf -m 30`
 
+We will work with the transcriptome.gtf for downstream analysis.
+
 > #Task #3
 > All of these tasks must be done for each individual alignment in order to compare the expression between samples. Your task now is to:
 
