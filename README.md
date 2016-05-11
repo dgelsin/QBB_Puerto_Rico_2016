@@ -189,9 +189,9 @@ Because Illumina reads are so short (<250 bp), the alignment of those reads to a
 
 	(R1) ---->    [[[[GAP]]]]     <----(R2)
 	
-			-----------------
+			o----------------------o
 	
-			  Fill in gap
+			  	  Fill in gap
 
 Unfortunately, it is not so straightforward when you take into account 5' & 3' UTRs, operons, and truncated or elongated transcripts. Thus, assembling full transcripts is a guesstimate of the full length transcript and must be verified experimentally (ie northern blot). Our next task is to assemble full length transcripts from the aligned reads and then quantitate how many reads fall within the assembled transcript boundaries.
 
