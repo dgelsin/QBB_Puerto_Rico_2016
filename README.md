@@ -120,10 +120,19 @@ Lastly we'll set the output pathway to where we want our alignment file to be pu
 Do the same for read2:
 > `$ hisat2 --verbose --un /path/to/read2_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/index/prefix -U /path/to/read2.fq -S /path/to/rRNA_alignment_R2.sam`
 
+Let's take a look at what the reads look like. A terminal command to do this is `less /path/to/your/reads`. The format looks awful! Take a look at the man page for it `man less`. `less -S` allows us to view files in proper format. The reads look fine so far. Let's count how many reads there are in each file. `wc -l` allows us to count each line in a file. Remember, fastq files have four lines for each read so we have to divide the `wc -l` output by 4. Or you can do it all in one shot like so: `cat /path/to/you/reads | echo $((`wc -l`/4))
+
+The paired-end read files have different numbers of reads. This will cause problems when we try to align against the reference genome because the aligner is written to take paired-end reads that have equal numbers of mated pairs. Our next task is to synchronize these reads.
 
 **Synchronize paired-end files (thus removing singlets)**
-> `$ python Downloads/Scripts-master/fastqCombinePairedEnd.py /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_1.fq /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_2.fq`
+> `$ python Downloads/Scripts-master/fastqCombinePairedEnd.py /path/to/reads_1.fq /path/to/reads_2.fq`
 
+Take a quick look at the output files:
+
+`cat /path/to/reads_R1.fq | echo $((`wc -l`/4))`
+`cat /path/to/reads_R2.fq | echo $((`wc -l`/4))`
+
+Perfect, they're synced. 
 
 ###*Step 2: Align rRNA-filtered reads against NCBI reference genome*
 Now that we have rRNA-clean reads, let us do the real alignment.
@@ -138,6 +147,11 @@ Now that we have rRNA-clean reads, let us do the real alignment.
 You now have your first alignment file, which is in the .sam format. You can learn more about the format here: https://samtools.github.io/hts-specs/SAMv1.pdf
 
 > #Task #2
+> You may have noticed that the reads started with a letter "C". This stands for control, meaning no treatment to *Haloferax volcanii*. The letter following "C" (eg C1, C2, C3) corresponds to a biological replicate. It is always important to do biological replicates to insure the change you are seeing is indeed real and not a one-time fluke. The reads starting with "O" are *Haloferax volcanii* that has been treated with ionizing radiation, thus causing oxidative stress (hence the "O"). Your task now is to:
+> - Remove rRNA from the remaining reads
+> - Synchronize the reads so that each paired-end pair has equal mates.
+> - Align the rRNA-removed reads against the reference HFX genome
+
 
 ###*Step 3: Assemble transcripts from aligned reads and quantitate*
 
