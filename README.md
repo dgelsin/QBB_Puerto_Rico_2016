@@ -71,6 +71,18 @@ Wolfgang Huber & Mark D Robinson
 [[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
 
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
+
+Tools/commands for this section:
+`wget`
+`hisat2`
+`less`
+`wc -l`
+`cat`
+`echo`
+`python`
+`fastqCombinePairedEnd.py`
+
+
 We will be doing a reference-based RNA-seq alignment analysis today. Inherent in this, we require a reference genome to do this sort of analysis. Fortunately, the *Haloferax volcanii* genome has been sequenced. Not everyone is so lucky, and because so few genomes are actually sequenced and annotated there are reference-indepenedent approaches as well (ie *de novo* assembly of transcripts) but this is beyond the scope of this workshop.
 
 ###*Step 1: Filter out Ribosomal RNA reads*
@@ -82,11 +94,12 @@ A couple of other reasons to remove rRNA, more important to bioinformatic analys
 **Get rRNA fasta files**
 > `Open Chrome.app and go to 
 
+We will be doing all our alignments with a very fast aligner for both DNA & RNA called hisat2, written by Daehwan Kim in Dr. Steven Salzberg's lab. This is the succesor to tophat2 and should be incorporated into pipelines that use full alignments. Take a look at the manual for explanation of options: https://ccb.jhu.edu/software/hisat2/manual.shtml
+
 **Build rRNA hisat2 index**
 > `$ hisat2-build /path/to/HFX_NCBI_rRNA.fa /path/to/index/*prefix*`
 
 We first need to build an index of our rRNA reference sequences. The *prefix* can be anything you want, but usually something logical is best like *HFX_NCBI_rRNA*
-
 
 **Align reads to rRNA & extract reads that do not align (eg mRNA)**
 
@@ -125,7 +138,7 @@ Let's take a look at what the reads look like. A terminal command to do this is 
 The paired-end read files have different numbers of reads. This will cause problems when we try to align against the reference genome because the aligner is written to take paired-end reads that have equal numbers of mated pairs. Our next task is to synchronize these reads.
 
 **Synchronize paired-end files (thus removing singlets)**
-> `$ python Downloads/Scripts-master/fastqCombinePairedEnd.py /path/to/reads_1.fq /path/to/reads_2.fq`
+> `$ python /Scripts-master/fastqCombinePairedEnd.py /path/to/reads_1.fq /path/to/reads_2.fq`
 
 Take a quick look at the output files:
 
