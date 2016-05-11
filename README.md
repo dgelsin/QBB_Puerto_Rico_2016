@@ -114,7 +114,7 @@ xxxx = adapter2
 
 ![reads_explanation](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/reads_explanation_figure.png)
 
-_Credit to Assessment of insert sizes and adapter content in fastq data from NexteraXT libraries Frontiers in Genetics **Frances S. Turner** for the image_
+_Credit to [Assessment of insert sizes and adapter content in fastq data from NexteraXT libraries](http://journal.frontiersin.org/article/10.3389/fgene.2014.00005/full) **Frances S. Turner** for the image_
 
 To remove adapter sequences from reads we will use the program `Trim_galore`:
 
