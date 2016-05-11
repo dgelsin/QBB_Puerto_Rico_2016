@@ -148,7 +148,7 @@ Everything else looks in order. QC is over and now it is time to start the RNA-s
 - [ ] Module 2: RNA-seq alignment and quantitation
 - [ ] Module 3: D.E. analysis & data visualization
 
-![GitHub Logo](https://drive.google.com/open?id=0B7kj2O0QUJsYN1dXNFBGYzZtbkE)
+![GitHub Logo](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-10%2017.37.51.png)
 Format: ![Alt Text](url)
 
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
