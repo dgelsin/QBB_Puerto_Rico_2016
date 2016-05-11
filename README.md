@@ -73,13 +73,21 @@ Wolfgang Huber & Mark D Robinson
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
 
 Tools/commands for this section:
+
 `wget`
+
 `hisat2`
+
 `less`
+
 `wc -l`
+
 `cat`
+
 `echo`
+
 `python`
+
 `fastqCombinePairedEnd.py`
 
 
