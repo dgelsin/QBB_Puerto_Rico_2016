@@ -70,6 +70,10 @@ Wolfgang Huber & Mark D Robinson
 We will be approaching this workshop with the imagined scenario: You are interested in studying the radiation- and oxidative stress-resistant Archaea *Haloferax volcanii*. You want to evaluate what genes are differentially expressed during ionizing radation (IR) treatment compared to the native state (your control). You've made RNA sequencing libraries and they have just come out of the sequencer. You have been handed the raw data and now you need to find which genes are differentially expressed. Our hypothesis is that IR induces differential expression of genes in *Haloferax volcanii*.
 
 #*Module 1: Introduction and Quality Control of RNA-seq .fastq Reads*
+Tools/commands for this section:
+`fastqc`
+`trim_galore`
+
 The first step a bioinformatician must do when getting back data from a sequencing facility is to assess the quality of the sequencing run. Many software are available for this task, but a particular favorite of mine is FastQC. We want to assess whether the reads are being based-called at a good enough quality, if there are any over-represented sequences that cloud the data (ie adapter sequences), the read length.
 
 First we will boot FastQC by opening the Terminal.app and running:
@@ -82,7 +86,7 @@ Next we'll load in our fastq reads into fastQC to begin analysis. Let's start wi
 - Search your directory for the fastq files
 - Click open
 
-Let the data load.
+Let the data load. :shipit:
 
 
 Looking at the overrepresented sequences we find that there are still adapters present in the reads! This will affect final alignment since they are not a part of the actual genome.
@@ -90,10 +94,15 @@ Looking at the overrepresented sequences we find that there are still adapters p
 The presence of sequence can occur when an insert length is shorter than the entire read size. For example if you have paired-end read length of 100x2 = 200 nt total length. If you insert is only 160 bp you will get an overlap of around 40 bp, meaning you sequence 40 bp into the adapter sequence flanking the insert.
 
 **** = adapter1
+
 xxxx = adapter2
+
       (R1) ------->
+
 	   ****-------xxxx insert
+
 	      <------- (R2)
+
 	      Overlap!
 
 To remove adapter sequences from reads we will use the program `Trim_galore`:
@@ -133,7 +142,11 @@ Great the overepresented sequences are not the adapters!
 
 > 3. Thought question: Why are there still overepresented sequences in the trimmed reads?
 
-Everything else looks in order. QC is over and now it is time to start the RNA-seq alignment.
+Everything else looks in order. QC is over and now it is time to start the RNA-seq alignment. :+1:
+
+- [x] Quality control of RNA-seq reads
+- [ ] RNA-seq alignment and quantitation
+- [ ] Module 3: D.E. analysis & data visualization
 
 [[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
 
@@ -366,6 +379,10 @@ awk '$22 ~ /=/ { print }' /path/to/consensus_transcriptome_combined.gtf > /path/
 
 > 2. Advanced: How do you extract intergenic class code transcripts?
 
+- [x] Quality control of RNA-seq reads
+- [x] RNA-seq alignment and quantitation
+- [ ] Module 3: D.E. analysis & data visualization
+
 #*Module 3: RNA-seq Differential Expression Analysis and Visualization*
 
 Tools/commands for this section:
@@ -513,8 +530,9 @@ We're done! Go out and party you bioinformaticians!
 
 > 5. Answer thought question: Notice the terminal `$` has been replaced with `>`, why is that?
 
-
-
+- [x] Quality control of RNA-seq reads
+- [x] RNA-seq alignment and quantitation
+- [x] Module 3: D.E. analysis & data visualization
 
 ##Possible other things to do
 - Mess around with MAplot settings for a beautiful graph
