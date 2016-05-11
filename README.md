@@ -522,7 +522,7 @@ Now we want to visualize what this data looks like. We are looking at data with 
 
 > `> plotMA(dds,ylim=c(-2,2),main='Ionizing Radiation-induced D.E. of Genes in Haloferax volcanii')`
 
-![MAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_MAplot_sRNAlib_QBB_PuertoRico_2016.compressed.pdf)
+![MAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_MAplot_sRNAlib_QBB_PuertoRico_2016.compressed-1.png)
 
 To save a copy of the plot:
 > `> dev.copy(png,'deseq2_MAplot.png')`
@@ -534,7 +534,7 @@ If we want to see if the variation in our data matches the treatment we expect t
 
 > `> print(plotPCA(rld, intgroup=c('condition')))`
 
-![PCAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_PCA_sRNAlib_QBB_PuertoRico_2016.compressed.pdf)
+![PCAplot](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Practice_genes_PCA_sRNAlib_QBB_PuertoRico_2016.compressed-1.png)
 
 > `> dev.copy(png,'deseq2_pca.png')`
 
@@ -571,6 +571,8 @@ We're done! Go out and party you bioinformaticians!
 - Other plots: expression plots of highest/lowest genes, cluster heatmap
 - Normalize for batch effect (variation other than treatment)
 - Load alignments into a genome viewer to see what aligments look like visually (eg IGV)
+
+![igv](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-10%2017.37.51.png)
 
 
 
