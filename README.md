@@ -18,9 +18,9 @@ Knowledge of and proficiency in bioinformatics are more important than ever in t
 
 #Setting up a UNIX environment for non-Mac/Linux/Ubuntu people
 
-insert Virtual box .img
+insert Virtual box image
 
-This virtual box .img has Ubuntu v. installed, along with the whole skew of programs we need for RNA-seq analysis. If you can succesfully install this you can skip the installation steps in the Tools section.
+This virtual box image has Ubuntu v. installed, along with the whole skew of programs we need for RNA-seq analysis. If you can succesfully install this you can skip the installation steps in the Tools section.
 
 #Tools
 
@@ -205,7 +205,27 @@ So we've got our reads trimmed of adapters and quality filtered but there is ano
 A couple of other reasons to remove rRNA, more important to bioinformatic analysis, is that something as highly expressed as rRNA can mask expression of more lowly expressed RNA species. So our first task in our RNA-seq adventure is to remove rRNA from our reads. We will do this by mapping our reads to 5S, 16S, and 23S rRNA. Let's pull some reference files from NCBI:
 
 **Get rRNA fasta files**
-> `Open Chrome.app and go to 
+We first need to get a .fa file with all rRNA sequences in *Haloferax volcanii*. How do we do this? [NCBI Gene Database](http://www.ncbi.nlm.nih.gov/gene/) is a good place to get fasta sequences of genes. Open it up in Chrome.app
+
+![NCBI_blank_page]()
+
+We can get the rRNA by searching the official abbreviation of *Haloferax volcanii*, HVO, followed by ribosomal RNA.
+
+![rRNA_search]()
+
+Click on one of the rRNA genes
+
+![rRNA_single_gene]()
+
+Click FASTA
+
+![rRNA_fasta]()
+
+Copy the sequence and header that begins with >
+
+![copy_seq]()
+
+Go back to terminal and open up a text editor by executing `nano`. Paste the sequence in the blank page that comes up. Repeat this for the other rRNA genes.
 
 We will be doing all our alignments with a very fast aligner for both DNA & RNA called hisat2, written by Daehwan Kim in Dr. Steven Salzberg's lab. This is the succesor to tophat2 and should be incorporated into pipelines that use full alignments. Take a look at the manual for explanation of options: https://ccb.jhu.edu/software/hisat2/manual.shtml
 
