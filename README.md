@@ -107,7 +107,7 @@ We want to set the *--rna-strandness RF* option because this is strand-specific 
  
 > `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF *--dta -I 0 -X 500*`
 
-Some more important options: *--dta is an option to put to make sure the output data is in the correct format to be piped into a transcript assembler stringtie (which we will be using). *-I and -X* are options specific to the insert sizes of the reads. This is information you get from library prepartion (ie the average fragment size of your RNA). For this data, the average insert size is ~350 bp. Setting a bigger max insert size usually yields in better alignments but causes slower aligning. 
+Some more important options: *--dta* is an option to put to make sure the output data is in the correct format to be piped into a transcript assembler stringtie (which we will be using). *-I and -X* are options specific to the insert sizes of the reads. This is information you get from library prepartion (ie the average fragment size of your RNA). For this data, the average insert size is ~350 bp. Setting a bigger max insert size usually yields in better alignments but causes slower aligning. 
 
 > `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 *-x /path/to/hisat2/index/prefix -U /path/to/read1.fq*`
 
@@ -125,8 +125,8 @@ Do the same for read2:
 > `$ python Downloads/Scripts-master/fastqCombinePairedEnd.py /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_1.fq /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_trimmed_reads/HFX_C1_IR_rRNA_removed_reads_2.fq`
 
 
-###*Step 2: Align filtered reads against NCBI reference genome*
-
+###*Step 2: Align rRNA-filtered reads against NCBI reference genome*
+Now that we have rRNA-clean reads, let us do the real alignment.
 
 **Build hisat2 NCBI refseq index**
 > `$ hisat2-build ../Desktop/sRNA_in_Archaea/Data/RNA-seq1-H2O2/EDGEpro_out_HFX/HFX_genome_edited_STAR.fa hisat2_HFX_genome_index_out/HFX_NCBI`
