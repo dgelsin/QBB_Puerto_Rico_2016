@@ -339,7 +339,7 @@ Once DESeq2 has been loaded in R will will specify the directory where our readc
 
 Next we'll import that read count files in the directory based on a common character found in each file name:
 
-> `> sampleFiles<-grep('HFX',list.files(directory),value=TRUE)
+> `> sampleFiles<-grep('HFX',list.files(directory),value=TRUE)`
 
 Let's view what files have been imported:
 
