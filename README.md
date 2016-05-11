@@ -285,7 +285,160 @@ Since we are focused on reference gene expression, we will only work with assemb
 
 awk '$22 ~ /=/ { print }' /path/to/consensus_transcriptome_combined.gtf > /path/to/consensus/transcriptome/genes_only.gtf
 
+> #Task #4
+> All of these tasks must be done for each individual alignment in order to compare the expression between samples. Your task now is to:
+
+> 1. How many genes were found in consensus?
+
+> 2. Advanced: How do you extract intergenic class code transcripts?
+
 #*Module 3: RNA-seq Differential Expression Analysis and Visualization*
+
+Tools/commands for this section:
+
+`HTSeq-count.py`
+
+`R`
+
+`DESeq2`
+
+The final module to this workshop! We now want to find which genes are differentially expressed between *Haloferax volcanii* that are being blasted with ionizing radiation and the happy, native state *Haloferax volcanii* that you passage every few days.
+
+Rather than an FPKM normalized approach for D.E. analysis, we will do a raw read count approach. An argument in the RNA-seq field is between people who swear by normalized FPKM differential expression (due to the highly normalized values) vs raw read counts because FPKM is too normalized and can mask lowly expressed transcripts (especially non-coding RNA). In reality, both have their weakness, strengths, and appropriate uses based on experimental design. It is up to the bioinformatician to decide which is best for his dataset, usually by troubleshooting many different pipelines. 
+
+`DESeq2` uses raw read counts to calculate differential expression, and for our purposes today that is a completely viable option for D.E. analysis. The input counts that `DESeq2` requires are created by a Python package written by Dr. Simon Anders called `HTSeq`.
+
+insert HTSeq count image
+
+To count the reads you excute:
+
+> `$ python -m HTSeq.scripts.count -f bam -s reverse -i gene_name /path/to/namesorted.bam /path/to/consensus/transcriptome/genes_only.gtf > /path/to/gene_counts.txt`
+
+`f` specifies the input file format
+`s` specifies the strand-specificity of the alignment
+`i` specifies which identifier to name each transcript
+
+> #Task #5
+> Counts have to be tabulated for each alignment. Your task now is to:
+
+> 1. Count raw reads that fall under each assembled transcript for each sample.
+
+> 2. Answer thought question: why use the option -s reverse instead of -s yes? hint: http://www-huber.embl.de/users/anders/HTSeq/doc/count.html
+
+Now that we have read counts for every sample, we want to actually calculate the differential expression of each gene respective to each sample. To do this we will boot open `R`:
+
+> `$ R`
+
+This opens up `R` in terminal and allows use to boot up the software package `DESeq2`:
+
+> `> library('DESeq2')`
+
+Once DESeq2 has been loaded in R will will specify the directory where our readcount files are:
+
+> `> directory<-'/path/to/gene/readcounts.txt'`
+
+Next we'll import that read count files in the directory based on a common character found in each file name:
+
+> `> sampleFiles<-grep('HFX',list.files(directory),value=TRUE)
+
+Let's view what files have been imported:
+
+> `> sampleFiles_no_mRNA_full`
+
+> `[1] "HFX_C1_mRNA_gene_counts_no.txt" "HFX_C2_mRNA_gene_counts_no.txt" "HFX_C3_mRNA_gene_counts_no.txt"`
+
+> `[4] "HFX_O1_mRNA_gene_counts_no.txt" "HFX_O2_mRNA_gene_counts_no.txt" "HFX_O3_mRNA_gene_counts_no.txt"`
+
+We want to now build a table based on these imported files, but we need to specify the conditions of each file and the sample name:
+
+> `> sampleCondition<-c('Control','Control','Control','Oxidative Stress','Oxidative Stress','Oxidative Stress')`
+
+> `sampleName<-c('Control Repl 1','Control Repl 2','Control Repl 3','Oxidative Stress Repl 1','Oxidative Stress Repl 2', 'Oxidative Stress Repl 3')`
+
+We are ready to feed these different variable into a table:
+
+> `> sampleTable<-data.frame(sampleName=sampleName, fileName=sampleFiles, condition=sampleCondition)`
+
+Let's look at the table:
+
+> `> sampleTable_no_mRNA_full`
+
+`               sampleName                       fileName        condition
+1          Control Repl 1 HFX_C1_mRNA_gene_counts_no.txt          Control
+2          Control Repl 2 HFX_C2_mRNA_gene_counts_no.txt          Control
+3          Control Repl 3 HFX_C3_mRNA_gene_counts_no.txt          Control
+4 Oxidative Stress Repl 1 HFX_O1_mRNA_gene_counts_no.txt Oxidative Stress
+5 Oxidative Stress Repl 2 HFX_O2_mRNA_gene_counts_no.txt Oxidative Stress
+6 Oxidative Stress Repl 3 HFX_O3_mRNA_gene_counts_no.txt Oxidative Stress`
+
+With this table we will feed it into DESeq2 to make it into a DESeq2 dataframe:
+
+> `> ddsHTSeq<-DESeqDataSetFromHTSeqCount(sampleTable=sampleTable, directory=directory, design=~condition)`
+
+We then need to makes "levels" in the dataframe which correspond to the conditions, which are important for log calculations. Put the control condition first as we are making comparison to the control:
+
+> `>colData(ddsHTSeq)$condition<-factor(colData(ddsHTSeq)$condition, levels=c('Control','Oxidative Stress'))
+
+Now we can feed this dataframe into the DESeq2 differential expression normalization and permutator:
+
+> `> dds<-DESeq(ddsHTSeq)`
+
+To view the results of this analysis:
+
+> `> res<-results(dds)`
+
+One of the important aspects of DESeq2 and differential expression analysis in general is that it calculates D.E. for each gene, but in order to confidently say a gene is D.E. one must rely on statistical significance. DESeq2 uses the statistical probability termed the *false discovery rate (FDR)*. Typically an *FDR* <5% is termed significant. If we want to order our results based on most to least significant we can do so by:
+
+> `> res<-res[order(res$padj),]`
+
+To view some results:
+
+> `head(res)`
+
+Now we want to visualize what this data looks like. We are looking at data with many variables and levels which can be hard to track. An excellet plot to view such data is the MAplot, which plots each individual D.E. gene as a point with x-axis of mean expression and y-axis of log-fold change. This is ploted based on oxidative stress in reference to control. Each point that is labeled red is significant based on <5% FDR.
+
+> `plotMA(dds,ylim=c(-2,2),main='Ionizing Radiation-induced D.E. of Genes in Haloferax volcanii')`
+
+To save a copy of the plot:
+> `> dev.copy(png,'deseq2_MAplot.png')`
+> `> dev.off()`
+
+If we want to see if the variation in our data matches the treatment we expect to be influencing variation, we can plot the data using a Principle Component Analysis:
+
+> `> rld<- rlogTransformation(dds, blind=TRUE)`
+> `> print(plotPCA(rld, intgroup=c('condition')))`
+> `> dev.copy(png,'deseq2_pca.png')`
+> `> dev.off()`
+
+To save a .txt file of the results from the D.E. analysis which can be viewed in Excel:
+
+> `> write.csv(as.data.frame(res),file='IR_DE_analysis_genes.csv')`
+
+> #Task #6
+> Using the D.E. analysis your task is now to:
+
+> 1. What are the 5 most upregulated and dowregulated genes? What do they do functionally?
+
+> 2. What is the most highly expressed gene? What is the lowest expressed gene?
+
+> 3. What does the PCA plot of this data mean? Are our samples well clustered?
+
+> 4. Advanced: What does FDR mean conceptually?
+
+> 5. Answer thought question: Notice the terminal `$` has been replaced with `>`, why is that?
+
+
+
+
+##Possible other things to do
+- Mess around with MAplot settings for a beautiful graph
+	-eg: mark lowest and highest expressed genes, most significant DE gene, etc
+-Other plots: expression plots of highest/lowest genes, cluster heatmap
+-Normalize for batch effect (variation other than treatment)
+-Load alignments into a genome viewer to see what aligments look like visually (eg IGV)
+
+
+
 
 
 
