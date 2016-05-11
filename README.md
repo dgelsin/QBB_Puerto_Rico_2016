@@ -99,7 +99,7 @@ xxxx = adapter2
 
       (R1) ------->
 
-	   ****-------xxxx insert
+	    ****-----xxxx insert
 
 	      <------- (R2)
 
@@ -144,8 +144,8 @@ Great the overepresented sequences are not the adapters!
 
 Everything else looks in order. QC is over and now it is time to start the RNA-seq alignment. :+1:
 
-- [x] Quality control of RNA-seq reads
-- [ ] RNA-seq alignment and quantitation
+- [x] Module 1: Quality control of RNA-seq reads
+- [ ] Module 2: RNA-seq alignment and quantitation
 - [ ] Module 3: D.E. analysis & data visualization
 
 [[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
@@ -379,8 +379,8 @@ awk '$22 ~ /=/ { print }' /path/to/consensus_transcriptome_combined.gtf > /path/
 
 > 2. Advanced: How do you extract intergenic class code transcripts?
 
-- [x] Quality control of RNA-seq reads
-- [x] RNA-seq alignment and quantitation
+- [x] Module 1: Quality control of RNA-seq reads
+- [x] Module 2: RNA-seq alignment and quantitation
 - [ ] Module 3: D.E. analysis & data visualization
 
 #*Module 3: RNA-seq Differential Expression Analysis and Visualization*
@@ -530,8 +530,8 @@ We're done! Go out and party you bioinformaticians!
 
 > 5. Answer thought question: Notice the terminal `$` has been replaced with `>`, why is that?
 
-- [x] Quality control of RNA-seq reads
-- [x] RNA-seq alignment and quantitation
+- [x] Module 1: Quality control of RNA-seq reads
+- [x] Module 2: RNA-seq alignment and quantitation
 - [x] Module 3: D.E. analysis & data visualization
 
 ##Possible other things to do
