@@ -1,5 +1,5 @@
-# QBB_Puerto_Rico_2016
-An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea
+# QBB Puerto Rico 2016
+An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
 
 Knowledge of and proficiency in bioinformatics are more important than ever in this day and age in biology. With the advent of high throughput and cheap sequencing technologies huge datasets are becoming more available. In order to work and parse through these datasets, a biologist needs to have a good familiarity with UNIX environments, scripting, and stastistics. While most of the ideas are the same between Eukaryotic and microbial bioinformatic analysis, there are indeed some considerations to take and different software/pipelines to use to specifically study Bacteria and Archaea. This workshop is designed to introduce you to the field of bioinformatics and expose you to the tools available for microbial bioinformatic analysis (focusing on organisms from halophilic environments). The workshop is divided into three modules: 1) Quality control (QC) of raw sequence data; 2) RNA-seq alignment and quantitation; and 3) RNA-seq differential expression and visualization.
 
@@ -148,7 +148,8 @@ Everything else looks in order. QC is over and now it is time to start the RNA-s
 - [ ] Module 2: RNA-seq alignment and quantitation
 - [ ] Module 3: D.E. analysis & data visualization
 
-[[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
+![GitHub Logo](https://drive.google.com/open?id=0B7kj2O0QUJsYN1dXNFBGYzZtbkE)
+Format: ![Alt Text](url)
 
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
 
