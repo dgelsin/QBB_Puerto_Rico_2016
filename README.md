@@ -188,7 +188,9 @@ You now have your first alignment file, which is in the .sam format. You can lea
 Because Illumina reads are so short (<250 bp), the alignment of those reads to a reference genome does not directly tell us about the abundance of whole transcript. This is one of the hardest problems in RNA-seq software development: the assembly of mapped reads into full transcripts. In theory, it is very easy to imagine any overlap between where reads overlap can count as an assembled region and then you grow outwards from there. Paired-end reads make this job even easier by filling in gaps where there are no overlaps, but because of the orientation of the way the reads mapped you can confidently fill in the gap between mated pairs. 
 
 (R1) ---->    [[[[GAP]]]]     <----(R2)
+	
 			-----------------
+	
 			  Fill in gap
 
 Unfortunately, it is not so straightforward when you take into account 5' & 3' UTRs, operons, and truncated or elongated transcripts. Thus, assembling full transcripts is a guesstimate of the full length transcript and must be verified experimentally (ie northern blot). Our next task is to assemble full length transcripts from the aligned reads and then quantitate how many reads fall within the assembled transcript boundaries.
