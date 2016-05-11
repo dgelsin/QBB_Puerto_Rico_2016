@@ -67,7 +67,74 @@ Another great resource of scientific software is found on one of my professor's,
 Simon Anders, Davis J McCarthy, Yunshun Chen, Michal Okoniewski, Gordon K Smyth,
 Wolfgang Huber & Mark D Robinson
 
+We will be approaching this workshop with the imagined scenario: You are interested in studying the radiation- and oxidative stress-resistant Archaea *Haloferax volcanii*. You want to evaluate what genes are differentially expressed during ionizing radation (IR) treatment compared to the native state (your control). You've made RNA sequencing libraries and they have just come out of the sequencer. You have been handed the raw data and now you need to find which genes are differentially expressed. Our hypothesis is that IR induces differential expression of genes in *Haloferax volcanii*.
+
 #*Module 1: Introduction and Quality Control of RNA-seq .fastq Reads*
+The first step a bioinformatician must do when getting back data from a sequencing facility is to assess the quality of the sequencing run. Many software are available for this task, but a particular favorite of mine is FastQC. We want to assess whether the reads are being based-called at a good enough quality, if there are any over-represented sequences that cloud the data (ie adapter sequences), the read length.
+
+First we will boot FastQC by opening the Terminal.app and running:
+> `$ fastqc`
+
+This will boot java and open a user interface for FastQC. Very easy to use.
+
+Next we'll load in our fastq reads into fastQC to begin analysis. Let's start with one pair-end read mates (`read1.fq read2.fq`)
+- Click File --> Open
+- Search your directory for the fastq files
+- Click open
+
+Let the data load.
+
+
+Looking at the overrepresented sequences we find that there are still adapters present in the reads! This will affect final alignment since they are not a part of the actual genome.
+
+The presence of sequence can occur when an insert length is shorter than the entire read size. For example if you have paired-end read length of 100x2 = 200 nt total length. If you insert is only 160 bp you will get an overlap of around 40 bp, meaning you sequence 40 bp into the adapter sequence flanking the insert.
+
+**** = adapter1
+xxxx = adapter2
+      (R1) ------->
+	   ****-------xxxx insert
+	      <------- (R2)
+	      Overlap!
+
+To remove adapter sequences from reads we will use the program `Trim_galore`:
+
+We need the reverse complemented adapter sequences for Read1 and Read2. This information is provided by the person who made the RNA-seq libraries. Our adapter sequences are as follows:
+
+Sequences for read1 (Prime2X)
+O1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG
+O2: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACCGATGTATCTCGTATGCCGTCTTCTGCTTG
+O3: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACTTAGGCATCTCGTATGCCGTCTTCTGCTTG
+C1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACTGACCAATCTCGTATGCCGTCTTCTGCTTG
+C2: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACACAGTGATCTCGTATGCCGTCTTCTGCTTG
+C3: AGATCGGAAGAGCACACGTCTGAACTCCAGTCACGCCAATATCTCGTATGCCGTCTTCTGCTTG
+
+Sequence for read2 (Primer1):
+AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+
+To execute it we will input on terminal:
+> `trim_galore --path_to_cutadapt /usr/local/bin/cutadapt --paired --fastqc -o /path/to/output/directory/ -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG -a2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT /path/to/raw_reads_1.fq /path/to/raw_reads_2.fq`
+
+`--paired` specifies this is paired end data and to return synchronized read pair files
+`-a` specifies the adapter sequence for read1 to trim
+`-a2` specifies the adapter sequence for read2 to trim
+
+Now let's compare what our adapter trimmed reads look like:
+
+File --> Open --> trimmed_reads.fq
+
+Great the overepresented sequences are not the adapters! 
+
+> #Task #1
+> You must remove the adapters from the reads for each sample. Your task now is to:
+
+> 1. Remove adapter sequences from reads for each sample.
+
+> 2. Visualize QC of reads pre- & post-trim
+
+> 3. Thought question: Why are there still overepresented sequences in the trimmed reads?
+
+Everything else looks in order. QC is over and now it is time to start the RNA-seq alignment.
+
 [[file:///Users/DRG/Dropbox/Screenshots/Screenshot%202016-05-06%2016.43.28.png]]
 
 #*Module 2: RNA-seq Alignment, Transcript Assembly, and Processing*
@@ -164,6 +231,11 @@ Perfect, they're synced.
 ###*Step 2: Align rRNA-filtered reads against NCBI reference genome*
 Now that we have rRNA-clean reads, let us do the real alignment.
 
+Get the reference genome files from NCBI:
+> `$ wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.fna.gz`
+
+> `$ wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.gff.gz`
+
 **Build hisat2 NCBI refseq index**
 > `$ hisat2-build /path/to/HFX_NCBI_reference_genome.fa`
 
@@ -181,6 +253,8 @@ You now have your first alignment file, which is in the .sam format. You can lea
 > 2. Synchronize the reads so that each paired-end pair has equal mates.
 
 > 3. Align the rRNA-removed reads against the reference HFX genome
+
+> 4. Advanced: What is a sam flag? How many reads were mapped to the - strand? To the + strand? hint: https://samtools.github.io/hts-specs/SAMv1.pdf  &&  https://broadinstitute.github.io/picard/explain-flags.html
 
 
 ###*Step 3: Assemble transcripts from aligned reads and quantitate*
@@ -422,6 +496,9 @@ If we want to see if the variation in our data matches the treatment we expect t
 To save a .txt file of the results from the D.E. analysis which can be viewed in Excel:
 
 > `> write.csv(as.data.frame(res),file='IR_DE_analysis_genes.csv')`
+
+We're done! Go out and party you bioinformaticians!
+
 
 > #Task #6
 > Using the D.E. analysis your task is now to:
