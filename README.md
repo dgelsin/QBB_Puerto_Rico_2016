@@ -353,7 +353,7 @@ We want to now build a table based on these imported files, but we need to speci
 
 > `> sampleCondition<-c('Control','Control','Control','Oxidative Stress','Oxidative Stress','Oxidative Stress')`
 
-> `sampleName<-c('Control Repl 1','Control Repl 2','Control Repl 3','Oxidative Stress Repl 1','Oxidative Stress Repl 2', 'Oxidative Stress Repl 3')`
+> `> sampleName<-c('Control Repl 1','Control Repl 2','Control Repl 3','Oxidative Stress Repl 1','Oxidative Stress Repl 2', 'Oxidative Stress Repl 3')`
 
 We are ready to feed these different variable into a table:
 
@@ -363,13 +363,19 @@ Let's look at the table:
 
 > `> sampleTable_no_mRNA_full`
 
-`               sampleName                       fileName        condition
-1          Control Repl 1 HFX_C1_mRNA_gene_counts_no.txt          Control
-2          Control Repl 2 HFX_C2_mRNA_gene_counts_no.txt          Control
-3          Control Repl 3 HFX_C3_mRNA_gene_counts_no.txt          Control
-4 Oxidative Stress Repl 1 HFX_O1_mRNA_gene_counts_no.txt Oxidative Stress
-5 Oxidative Stress Repl 2 HFX_O2_mRNA_gene_counts_no.txt Oxidative Stress
-6 Oxidative Stress Repl 3 HFX_O3_mRNA_gene_counts_no.txt Oxidative Stress`
+> `               sampleName                       fileName        condition`
+
+> `1          Control Repl 1 HFX_C1_mRNA_gene_counts_no.txt          Control`
+
+> `2          Control Repl 2 HFX_C2_mRNA_gene_counts_no.txt          Control`
+
+> `3          Control Repl 3 HFX_C3_mRNA_gene_counts_no.txt          Control`
+
+> `4 Oxidative Stress Repl 1 HFX_O1_mRNA_gene_counts_no.txt Oxidative Stress`
+
+> `5 Oxidative Stress Repl 2 HFX_O2_mRNA_gene_counts_no.txt Oxidative Stress`
+
+> `6 Oxidative Stress Repl 3 HFX_O3_mRNA_gene_counts_no.txt Oxidative Stress`
 
 With this table we will feed it into DESeq2 to make it into a DESeq2 dataframe:
 
@@ -377,7 +383,7 @@ With this table we will feed it into DESeq2 to make it into a DESeq2 dataframe:
 
 We then need to makes "levels" in the dataframe which correspond to the conditions, which are important for log calculations. Put the control condition first as we are making comparison to the control:
 
-> `>colData(ddsHTSeq)$condition<-factor(colData(ddsHTSeq)$condition, levels=c('Control','Oxidative Stress'))
+> `>colData(ddsHTSeq)$condition<-factor(colData(ddsHTSeq)$condition, levels=c('Control','Oxidative Stress'))`
 
 Now we can feed this dataframe into the DESeq2 differential expression normalization and permutator:
 
@@ -393,11 +399,11 @@ One of the important aspects of DESeq2 and differential expression analysis in g
 
 To view some results:
 
-> `head(res)`
+> `> head(res)`
 
 Now we want to visualize what this data looks like. We are looking at data with many variables and levels which can be hard to track. An excellet plot to view such data is the MAplot, which plots each individual D.E. gene as a point with x-axis of mean expression and y-axis of log-fold change. This is ploted based on oxidative stress in reference to control. Each point that is labeled red is significant based on <5% FDR.
 
-> `plotMA(dds,ylim=c(-2,2),main='Ionizing Radiation-induced D.E. of Genes in Haloferax volcanii')`
+> `> plotMA(dds,ylim=c(-2,2),main='Ionizing Radiation-induced D.E. of Genes in Haloferax volcanii')`
 
 To save a copy of the plot:
 > `> dev.copy(png,'deseq2_MAplot.png')`
@@ -406,8 +412,11 @@ To save a copy of the plot:
 If we want to see if the variation in our data matches the treatment we expect to be influencing variation, we can plot the data using a Principle Component Analysis:
 
 > `> rld<- rlogTransformation(dds, blind=TRUE)`
+
 > `> print(plotPCA(rld, intgroup=c('condition')))`
+
 > `> dev.copy(png,'deseq2_pca.png')`
+
 > `> dev.off()`
 
 To save a .txt file of the results from the D.E. analysis which can be viewed in Excel:
@@ -432,9 +441,13 @@ To save a .txt file of the results from the D.E. analysis which can be viewed in
 
 ##Possible other things to do
 - Mess around with MAplot settings for a beautiful graph
+
 	-eg: mark lowest and highest expressed genes, most significant DE gene, etc
+
 -Other plots: expression plots of highest/lowest genes, cluster heatmap
+
 -Normalize for batch effect (variation other than treatment)
+
 -Load alignments into a genome viewer to see what aligments look like visually (eg IGV)
 
 
