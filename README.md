@@ -114,6 +114,8 @@ xxxx = adapter2
 
 ![reads_explanation](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/reads_explanation_figure.png)
 
+*Credit to Assessment of insert sizes and adapter content in fastq data from NexteraXT libraries Frontiers in Genetics **Frances S. Turner** for the image* 
+
 To remove adapter sequences from reads we will use the program `Trim_galore`:
 
 We need the reverse complemented adapter sequences for Read1 and Read2. This information is provided by the person who made the RNA-seq libraries. Our adapter sequences are as follows:
@@ -426,6 +428,8 @@ Rather than an FPKM normalized approach for D.E. analysis, we will do a raw read
 `DESeq2` uses raw read counts to calculate differential expression, and for our purposes today that is a completely viable option for D.E. analysis. The input counts that `DESeq2` requires are created by a Python package written by Dr. Simon Anders called `HTSeq`.
 
 ![HTseq_count](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/count_modes.png)
+
+*Credit to Dr. Simon Anders for the image from his website: http://www-huber.embl.de/users/anders/HTSeq/doc/count.html*
 
 To count the reads you excute:
 
