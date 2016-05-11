@@ -18,7 +18,7 @@ Knowledge of and proficiency in bioinformatics are more important than ever in t
 
 #Setting up a UNIX environment for non-Mac/Linux/Ubuntu people
 
-insert Virtual box image
+[Ubuntu Virtual Box image](https://www.dropbox.com/s/ggsdc8e0rhiqiqg/QBB_Puerto_Rico_2016_BioLinux.ova?dl=0)
 
 This virtual box image has Ubuntu v. installed, along with the whole skew of programs we need for RNA-seq analysis. If you can succesfully install this you can skip the installation steps in the Tools section.
 
@@ -213,8 +213,7 @@ We can get the rRNA by searching the official abbreviation of *Haloferax volcani
 
 ![rRNA_search](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.27.36.png)
 
-Click on one of the rRNA genes --> Click FASTA towards the bottom left
-
+Click on one of the rRNA genes --> Click FASTA towards the bottom right
 ![rRNA_single_gene](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/Screenshot%202016-05-11%2011.27.58.png)
 
 Copy the sequence and header that begins with >
@@ -325,7 +324,7 @@ Because Illumina reads are so short (<250 bp), the alignment of those reads to a
 
 Unfortunately, it is not so straightforward when you take into account 5' & 3' UTRs, operons, and truncated or elongated transcripts. Thus, assembling full transcripts is a guesstimate of the full length transcript and must be verified experimentally (ie northern blot). Our next task is to assemble full length transcripts from the aligned reads and then quantitate how many reads fall within the assembled transcript boundaries.
 
-We will be using one of the best transcript assemblers available called `stringtie` which was developed by in Dr. Steven Salzberg's lab. This is the succesor to cufflinks2. In order use `stringtie` with our alignments we have to convert the files into the correct file types.
+We will be using one of the best transcript assemblers available called `stringtie` which was developed by Mihaela Pertea in Dr. Steven Salzberg's lab. This is the succesor to cufflinks2. In order use `stringtie` with our alignments we have to convert the files into the correct file types.
 
 **Convert sam to bam**
 > `$ samtools view -bS /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam > /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam`
