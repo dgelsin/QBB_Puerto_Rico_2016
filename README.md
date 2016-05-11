@@ -72,6 +72,8 @@ Mingxiang Teng, Michael I. Love, Carrie A. Davis, Sarah Djebali, Alexander Dobin
 Simon Anders, Davis J McCarthy, Yunshun Chen, Michal Okoniewski, Gordon K Smyth,
 Wolfgang Huber & Mark D Robinson
 
+#Introduction
+
 We will be approaching this workshop with the imagined scenario: You are interested in studying the radiation- and oxidative stress-resistant Archaea *Haloferax volcanii*. You want to evaluate what genes are differentially expressed during ionizing radation (IR) treatment compared to the native state (your control). You've made RNA sequencing libraries and they have just come out of the sequencer. You have been handed the raw data and now you need to find which genes are differentially expressed. Our hypothesis is that IR induces differential expression of genes in *Haloferax volcanii*.
 
 #*Module 1: Introduction and Quality Control of RNA-seq .fastq Reads*
