@@ -343,7 +343,7 @@ Next we'll import that read count files in the directory based on a common chara
 
 Let's view what files have been imported:
 
-> `> sampleFiles_no_mRNA_full`
+> `> sampleFiles`
 
 > `[1] "HFX_C1_mRNA_gene_counts_no.txt" "HFX_C2_mRNA_gene_counts_no.txt" "HFX_C3_mRNA_gene_counts_no.txt"`
 
