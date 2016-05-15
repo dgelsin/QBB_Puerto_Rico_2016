@@ -64,13 +64,15 @@ Another great resource of scientific software is found on one of my professor's,
 > - *Haloferax volcanii* RNA-seq raw reads: 
 > `wget `
 
-#Literature
+#Literature/Resources
 [A benchmark for RNA-seq quantification pipelines](http://download.springer.com/static/pdf/576/art%253A10.1186%252Fs13059-016-0940-1.pdf?originUrl=http%3A%2F%2Fgenomebiology.biomedcentral.com%2Farticle%2F10.1186%2Fs13059-016-0940-1&token2=exp=1462985669~acl=%2Fstatic%2Fpdf%2F576%2Fart%25253A10.1186%25252Fs13059-016-0940-1.pdf*~hmac=85d7d63dc66a6484107cc9c2c7f30168a0f737ef1075db9c9bef3c6da4747210)
 Mingxiang Teng, Michael I. Love, Carrie A. Davis, Sarah Djebali, Alexander Dobin, Brenton R. Graveley, Sheng Li, Christopher E. Mason, Sara Olson, Dmitri Pervouchine, Cricket A. Sloan, Xintao Wei, Lijun Zhan and Rafael A. Irizarry
 
 [Count-based differential expression analysis of RNA sequencing data using R and Bioconductor](http://www.nature.com/nprot/journal/v8/n9/pdf/nprot.2013.099.pdf)
 Simon Anders, Davis J McCarthy, Yunshun Chen, Michal Okoniewski, Gordon K Smyth,
 Wolfgang Huber & Mark D Robinson
+
+[List of commands on terminal from Codeacademy](https://www.codecademy.com/articles/command-line-commands)
 
 #Introduction
 
