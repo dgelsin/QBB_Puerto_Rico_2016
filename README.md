@@ -61,8 +61,6 @@ Another great resource of scientific software is found on one of my professor's,
 > `wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.fna.gz`
 > - *Haloferax volcanii* NCBI reference gene annotations: 
 > `wget ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000025685.1_ASM2568v1/GCF_000025685.1_ASM2568v1_genomic.gff.gz`
-> - *Haloferax volcanii* RNA-seq raw reads: 
-> `wget `
 
 #Literature/Resources
 [A benchmark for RNA-seq quantification pipelines](http://download.springer.com/static/pdf/576/art%253A10.1186%252Fs13059-016-0940-1.pdf?originUrl=http%3A%2F%2Fgenomebiology.biomedcentral.com%2Farticle%2F10.1186%2Fs13059-016-0940-1&token2=exp=1462985669~acl=%2Fstatic%2Fpdf%2F576%2Fart%25253A10.1186%25252Fs13059-016-0940-1.pdf*~hmac=85d7d63dc66a6484107cc9c2c7f30168a0f737ef1075db9c9bef3c6da4747210)
