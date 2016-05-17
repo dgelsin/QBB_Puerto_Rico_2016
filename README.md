@@ -1,5 +1,6 @@
 # QBB Puerto Rico 2016
 An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
+By Diego Rivera Gelsinger, PhD Student in Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University
 
 ![Puerto_Rico](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/puerto_rico_banner.png)
 
