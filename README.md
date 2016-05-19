@@ -18,7 +18,7 @@ By Diego Rivera Gelsinger, PhD Student in Dr. Jocelyne DiRuggiero's laboratory a
 	d. `sudo pip install pysam`
 	
 3. Download data onto virtual box: 
-https://www.dropbox.com/sh/jken6q6bc5gyv2q/AABP_DVngSy1Ug9qw0V1dHvna?dl=0
+https://www.dropbox.com/s/mjqibvy22n0a5b4/QBB_Practice_Data.zip?dl=0
 
 
 
