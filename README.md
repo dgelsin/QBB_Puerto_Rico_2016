@@ -4,12 +4,19 @@ An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophil
 By Diego Rivera Gelsinger, PhD Student in Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University
 
 #Things to do before class starts!
+
 1. Open terminal
+
 2. Execute these commands in order:
-	a. brew uninstall python 
-	b. wget https://bootstrap.pypa.io/get-pip.py
-	c. sudo python get-pip.py
-	d. sudo pip install pysam
+
+	a. `brew uninstall python` 
+
+	b. `wget https://bootstrap.pypa.io/get-pip.py`
+
+	c. `sudo python get-pip.py`
+
+	d. `sudo pip install pysam`
+	
 3. Download data onto virtual box: 
 https://www.dropbox.com/sh/jken6q6bc5gyv2q/AABP_DVngSy1Ug9qw0V1dHvna?dl=0
 
