@@ -2,6 +2,16 @@
 An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
 By Diego Rivera Gelsinger, PhD Student in Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University
 
+#Things to do before class starts!
+1. Open terminal
+2. Execute these commands in order:
+	a. brew uninstall python 
+	b. wget https://bootstrap.pypa.io/get-pip.py
+	c.
+	d.
+
+
+
 ![Puerto_Rico](https://github.com/dgelsin/QBB_Puerto_Rico_2016/blob/master/practice_images/puerto_rico_banner.png)
 
 Knowledge of and proficiency in bioinformatics are more important than ever in this day and age in biology. With the advent of high throughput and cheap sequencing technologies huge datasets are becoming more available. In order to work and parse through these datasets, a biologist needs to have a good familiarity with UNIX environments, scripting, and stastistics. While most of the ideas are the same between Eukaryotic and microbial bioinformatic analysis, there are indeed some considerations to take and different software/pipelines to use to specifically study Bacteria and Archaea. This workshop is designed to introduce you to the field of bioinformatics and expose you to the tools available for microbial bioinformatic analysis (focusing on organisms from halophilic environments). The workshop is divided into three modules: 1) Quality control (QC) of raw sequence data; 2) RNA-seq alignment and quantitation; and 3) RNA-seq differential expression and visualization.
@@ -145,7 +155,7 @@ We need the reverse complemented adapter sequences for Read1 and Read2. This inf
 > AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
 
 To execute it we will input on terminal:
-> `trim_galore --path_to_cutadapt /usr/local/bin/cutadapt --paired --fastqc -o /path/to/output/directory/ -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCACATCACGATCTCGTATGCCGTCTTCTGCTTG -a2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT /path/to/raw_reads_1.fq /path/to/raw_reads_2.fq`
+> `trim_galore --path_to_cutadapt ~/.local/bin/cutadapt --paired --fastqc -o /home/manager/Desktop/QBB_Practice_Data/RNA-seq_reads/trimmed -a AGATCGGAAGAGCACACGTCTGAACTCCAGTCACTGACCAATCTCGTATGCCGTCTTCTGCTTG -a2 AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_reads/raw/HFX_IR_C1_sRNA_subsampled_R1.fastq' '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_reads/raw/HFX_IR_C1_sRNA_subsampled_R2.fastq'`
 
 `--paired` specifies this is paired end data and to return synchronized read pair files
 `-a` specifies the adapter sequence for read1 to trim
@@ -231,7 +241,7 @@ Go back to terminal and open up a text editor by executing `nano`. Paste the seq
 We will be doing all our alignments with a very fast aligner for both DNA & RNA called hisat2, written by Daehwan Kim in Dr. Steven Salzberg's lab. This is the succesor to tophat2 and should be incorporated into pipelines that use full alignments. Take a look at the manual for explanation of options: https://ccb.jhu.edu/software/hisat2/manual.shtml
 
 **Build rRNA hisat2 index**
-> `$ hisat2-build /path/to/HFX_NCBI_rRNA.fa /path/to/index/*prefix*`
+> `$ hisat2-build /home/manager/Desktop/QBB_Practice_Data/Reference_Genome_files/HFX_all_rRNA.fa /home/manager/Desktop/QBB_Practice_Data/HFX_rRNA_hisat2_index/HFX_rRNA_hisat2`
 
 We first need to build an index of our rRNA reference sequences. The *prefix* can be anything you want, but usually something logical is best like *HFX_NCBI_rRNA*
 
@@ -260,12 +270,12 @@ Some more important options: *--dta* is an option to put to make sure the output
 
 Next we set the path to the hisat2 index we built earlier and the path to your first mate reads (Read1).
 
-> `hisat2 --verbose --un /path/to/read1_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/index/prefix -U /path/to/read1.fq *-S /path/to/rRNA_alignment_R1.sam*`
+> `hisat2 --verbose --un RNA-seq_reads/rRNA_removed/HFX_C1_rRNA_removed_R1.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x HFX_rRNA_hisat2_index/HFX_rRNA_hisat2 -U RNA-seq_reads/trimmed/reads_only/HFX_IR_C1_sRNA_subsampled_R1_val_1.fq -S RNA-seq_alignments/HFX_C1_rRNA_alignment_R1.sam`
 
 Lastly we'll set the output pathway to where we want our alignment file to be put (.sam file)
 
 Do the same for read2:
-> `$ hisat2 --verbose --un /path/to/read2_rRNA_removed.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/index/prefix -U /path/to/read2.fq -S /path/to/rRNA_alignment_R2.sam`
+> `$ hisat2 --verbose --un RNA-seq_reads/rRNA_removed/HFX_C1_rRNA_removed_R2.fq --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x HFX_rRNA_hisat2_index/HFX_rRNA_hisat2 -U RNA-seq_reads/trimmed/reads_only/HFX_IR_C1_sRNA_subsampled_R2_val_2.fq -S RNA-seq_alignments/HFX_C1_rRNA_alignment_R2.sam``
 
 Let's take a look at what the reads look like. A terminal command to do this is `less /path/to/your/reads`. The format looks awful! Take a look at the man page for it `man less`. `less -S` allows us to view files in proper format. The reads look fine so far. 
 
@@ -276,7 +286,7 @@ Let's count how many reads there are in each file. `wc -l` allows us to count ea
 The paired-end read files have different numbers of reads. This will cause problems when we try to align against the reference genome because the aligner is written to take paired-end reads that have equal numbers of mated pairs. Our next task is to synchronize these reads.
 
 **Synchronize paired-end files (thus removing singlets)**
-> `$ python /Scripts-master/fastqCombinePairedEnd.py /path/to/reads_1.fq /path/to/reads_2.fq`
+> `$ python Desktop/QBB_Practice_Data/Scripts/fastqCombinePairedEnd.py '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_reads/rRNA_removed/HFX_C1_rRNA_removed_R1.fq' '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_reads/rRNA_removed/HFX_C1_rRNA_removed_R2.fq'`
 
 Take a quick look at the output files:
 
@@ -298,7 +308,7 @@ Get the reference genome files from NCBI:
 
 
 **Align filtered reads**
-> `$ hisat2 --verbose  --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /path/to/hisat2/HFX_index -1 /path/to/synced/rRNA-removed_read1.fq -2 /path/to/synced/rRNA-removed_read2.fq -S /path/to/rRNA-removed_hisat2_alignment.sam`
+> `$ hisat2 --verbose --no-spliced-alignment --rna-strandness RF --dta -I 0 -X 500 -x /home/manager/Desktop/QBB_Practice_Data/HFX_NCBI_hisat2_index/HFX_NCBI -1 '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_reads/rRNA_removed/synced/HFX_C1_rRNA_removed_R1.fq_pairs_R1.fastq'  -2 '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_reads/rRNA_removed/synced/HFX_C1_rRNA_removed_R2.fq_pairs_R2.fastq' -S /home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/HFX_C1_rRNA-removed_hisat2_alignment.sam`
 
 You now have your first alignment file, which is in the .sam format. You can learn more about the format here: https://samtools.github.io/hts-specs/SAMv1.pdf
 
@@ -333,7 +343,7 @@ Unfortunately, it is not so straightforward when you take into account 5' & 3' U
 We will be using one of the best transcript assemblers available called `stringtie` which was developed by Mihaela Pertea in Dr. Steven Salzberg's lab. This is the succesor to cufflinks2. In order use `stringtie` with our alignments we have to convert the files into the correct file types.
 
 **Convert sam to bam**
-> `$ samtools view -bS /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.sam > /Users/DRG/Desktop/HFX_rRNA/rRNA_removed_alignments/HFX_O3_mRNA_rRNA_mapped_hisat2_rRNA_removed_alignment.bam`
+> `$ samtools view -bS '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/HFX_C1_rRNA-removed_hisat2_alignment.sam' > /home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/HFX_C1_rRNA_removed_alignment.bam`
 
 Samtools is a great tool available for parsing and filtering aligned reads in .sam format. It has a whole host of options available and their manual warrants reading extensively: http://www.htslib.org/doc/samtools.html
 
@@ -346,12 +356,12 @@ We will use another samtools command: `samtools sort`
 
 To sort by coordinate:
 
-> `$ samtools sort /path/to/alignment.bam -o /path/to/output/alignment.cordsorted.bam`
+> `$ samtools sort '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/HFX_C1__rRNA_removed_alignment.bam' -o '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/cordsorted/HFX_C1_rRNA_removed_alignment.cordsorted.bam'`
 
 For another tool to count the reads that fall under assembled transcripts (HTSeq-count) that we will use downstream, we need alignments that are sorted by name instead of coordinates. Let's take care of this now.
 
 To sort by name:
-> `$ samtools sort -n /path/to/alignment.bam -o /path/to/output/alignment.namesorted`
+> `$ samtools sort -n '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/HFX_C1__rRNA_removed_alignment.bam' -o '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/namesorted/HFX_C1_rRNA_removed_alignment.namesorted.bam'`
 
 Now we can assemble the transcripts based on the alignments and a reference annotation. `stringtie` calculates the coverage (ie the number of reads in a given area) and normalizes these counts into an expression value per assembled transcript termed RPKM/FPKM. This value stands for: *Fragments Per Kilobase of exon per Million reads*. This basically means it is expression of a transcript normalized by total length of the assembled transcript and normalized by the total size of the RNA-seq library, thus making it possible to compare Gene A in Sample 1 to Sample 2 even if Sample 1′s RNA-seq library has 60 million pairs of reads and Sample 2′s library has only 30 million pairs of reads. For further information: http://www.cureffi.org/2013/09/12/counts-vs-fpkms-in-rna-seq/
 
@@ -360,7 +370,7 @@ Now we can assemble the transcripts based on the alignments and a reference anno
 We will call `stringtie` with a few options to get out tab-delimited files of coverage `-C` and gene abundances `A`. It is worth noting that stringtie builds whole transcriptomes, meaning it will build transcripts for genes and anything else (ie non-coding RNA). We will ignore anything that is not a gene for today. We will also specify the minimum distance (30 nt in this case) allowed between two reads to be called a single transcript with `-m 30`. For more information on stringtie read the manual: https://ccb.jhu.edu/software/stringtie/index.shtml?t=manual
 
 **Assemble reads into transcripts and quantify abundance**
-> `$ stringtie /path/to/cordsorted.bam -G /path/to/reference_genome_annotation.gff -o /path/to/assemble_transcriptome_stringtie_out.gtf -A /path/to/gene_abund.tab -C /path/to/cov_refs.gtf -m 30`
+> `$ stringtie '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/cordsorted/HFX_C1_rRNA_removed_alignment.cordsorted.bam' -G '/home/manager/Desktop/QBB_Practice_Data/Reference_Genome_files/GCF_000025685.1_ASM2568v1_genomic.gff' -o /home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C1_stringout/HFX_C1_assemble_transcriptome_stringtie_out.gtf -A /home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C1_stringout/HFX_C1_gene_abund.tab -C /home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C1_stringout/HFX_C1_cov_refs.gtf -m 30`
 
 We will work with the transcriptome.gtf for downstream analysis.
 
@@ -381,19 +391,19 @@ Now that we have the individual transcriptomes for each sample, we have to compa
 First we will need to make an accession file that contains the paths to each stringtie-built transcriptome. You can open a text editor like so: `nano`
 
 In the text editor you want to have a line for each transcriptome. Your file should look similar to this when done:
-> `./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C1_rRNA_removed_stringtie_out/HFX_C1_rRNA_removed_transcriptome_stringout.gtf
-./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C2_rRNA_removed_stringtie_out/HFX_C2_rRNA_removed_transcriptome_stringout.gtf
-./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_C3_rRNA_removed_stringtie_out/HFX_C3_rRNA_removed_transcriptome_stringout.gtf
-./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_O1_rRNA_removed_stringtie_out/HFX_O1_rRNA_removed_transcriptome_stringout.gtf
-./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_O2_rRNA_removed_stringtie_out/HFX_O2_rRNA_removed_transcriptome_stringout.gtf
-./Desktop/HFX_rRNA/rRNA_removed_alignments/stringtie_out/HFX_O3_rRNA_removed_stringtie_out/HFX_O3_rRNA_removed_transcriptome_stringout.gtf`
+> `./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C1_stringout/HFX_C1_assemble_transcriptome_stringtie_out.gtf
+./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C2_stringout/HFX_C2_assemble_transcriptome_stringtie_out.gtf
+./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C3_stringout/HFX_C3_assemble_transcriptome_stringtie_out.gtf
+./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_O1_stringout/HFX_O1_assemble_transcriptome_stringtie_out.gtf
+./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_O2_stringout/HFX_O2_assemble_transcriptome_stringtie_out.gtf
+./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_O3_stringout/HFX_O3_assemble_transcriptome_stringtie_out.gtf`
 
 To close the editor and save the file press `ctrl + x` --> press `y` to save --> name `gtf_acession_list.txt`
 
 Next to get a consensus trancriptome:
 
 **Merge transcriptomes**
-> `$ cuffcompare -o /path/to/conensus_transcriptome_cuffcompare_output.gtf -i /path/to/gtf_acession_list.txt -r /path/to/reference_genome_gene_annotation.gtf`
+> `$ cuffcompare -o /home/manager/Desktop/QBB_Practice_Data/Quantitation/HFX_consensus_transcriptome_cuffcompare_output.gtf -i '/home/manager/Desktop/QBB_Practice_Data/Quantitation/gtf_acession_list.txt' -r '/home/manager/Desktop/QBB_Practice_Data/Reference_Genome_files/GCF_000025685.1_ASM2568v1_genomic.gff'`
 
 The output of this is a consensus transcriptome called `.combined.gtf` With the `r` option we compared out individual transcriptomes against the reference gene annotation, which gave a category code for each assembled transcript based on the relationship it has with the reference gene annotation. For example, if an assembled transcript STRG.1 matches a reference annotation it will be given a category code of "=". 
 
@@ -418,7 +428,7 @@ A cheatsheat for category markers:
 
 Since we are focused on reference gene expression, we will only work with assembled transcripts that have the category code "=". To pull out these transcripts from everything else we will use the command `awk`. `awk` is extremely useful, but a full explanation and demonstration of how it works is far beyond the scope of this workshop so please just have faith and execute the command:
 
-awk '$22 ~ /=/ { print }' /path/to/consensus_transcriptome_combined.gtf > /path/to/consensus/transcriptome/genes_only.gtf
+`$ awk '$22 ~ /=/ { print }' '/home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/Cuffcompare_out/HFX_consensus_transcriptome_cuffcompare_output.gtf.combined.gtf' > '/home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/Cuffcompare_out/HFX_genes.gtf'`
 
 > #Task #4
 > All of these tasks must be done for each individual alignment in order to compare the expression between samples. Your task now is to:
@@ -454,7 +464,7 @@ Rather than an FPKM normalized approach for D.E. analysis, we will do a raw read
 
 To count the reads you excute:
 
-> `$ python -m HTSeq.scripts.count -f bam -s reverse -i gene_name /path/to/namesorted.bam /path/to/consensus/transcriptome/genes_only.gtf > /path/to/gene_counts.txt`
+> `$ python -m HTSeq.scripts.count -f bam -s reverse -i gene_name '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/namesorted/HFX_C1_rRNA_removed_alignment.namesorted.bam'  '/home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/Cuffcompare_out/HFX_genes.gtf' > /home/manager/Desktop/QBB_Practice_Data/Differential_expression_analysis/Counts/HFX_C1_gene_counts.txt`
 
 `f` specifies the input file format
 `s` specifies the strand-specificity of the alignment
@@ -477,7 +487,7 @@ This opens up `R` in terminal and allows use to boot up the software package `DE
 
 Once DESeq2 has been loaded in R will will specify the directory where our readcount files are:
 
-> `> directory<-'/path/to/gene/readcounts.txt'`
+> `> directory<-'/home/manager/Desktop/QBB_Practice_Data/Backup/Differential_expression_analysis/Counts'`
 
 Next we'll import that read count files in the directory based on a common character found in each file name:
 
@@ -503,21 +513,21 @@ We are ready to feed these different variable into a table:
 
 Let's look at the table:
 
-> `> sampleTable_no_mRNA_full`
+> `> sampleTable`
 
 > `               sampleName                       fileName        condition`
 
-> `1          Control Repl 1 HFX_C1_mRNA_gene_counts_no.txt          Control`
+> `1          Control Repl 1 HFX_C1_gene_counts.txt          Control`
 
-> `2          Control Repl 2 HFX_C2_mRNA_gene_counts_no.txt          Control`
+> `2          Control Repl 2 HFX_C2_gene_counts.txt          Control`
 
-> `3          Control Repl 3 HFX_C3_mRNA_gene_counts_no.txt          Control`
+> `3          Control Repl 3 HFX_C3_gene_counts.txt          Control`
 
-> `4 Oxidative Stress Repl 1 HFX_O1_mRNA_gene_counts_no.txt Oxidative Stress`
+> `4 Oxidative Stress Repl 1 HFX_O1_gene_counts.txt Oxidative Stress`
 
-> `5 Oxidative Stress Repl 2 HFX_O2_mRNA_gene_counts_no.txt Oxidative Stress`
+> `5 Oxidative Stress Repl 2 HFX_O2_gene_counts.txt Oxidative Stress`
 
-> `6 Oxidative Stress Repl 3 HFX_O3_mRNA_gene_counts_no.txt Oxidative Stress`
+> `6 Oxidative Stress Repl 3 HFX_O3_gene_counts.txt Oxidative Stress`
 
 With this table we will feed it into DESeq2 to make it into a DESeq2 dataframe:
 
