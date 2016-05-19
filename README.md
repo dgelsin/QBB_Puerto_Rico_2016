@@ -1,5 +1,6 @@
 # QBB Puerto Rico 2016
 An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
+
 By Diego Rivera Gelsinger, PhD Student in Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University
 
 #Things to do before class starts!
@@ -7,8 +8,10 @@ By Diego Rivera Gelsinger, PhD Student in Dr. Jocelyne DiRuggiero's laboratory a
 2. Execute these commands in order:
 	a. brew uninstall python 
 	b. wget https://bootstrap.pypa.io/get-pip.py
-	c.
-	d.
+	c. sudo python get-pip.py
+	d. sudo pip install pysam
+3. Download data onto virtual box: 
+https://www.dropbox.com/sh/jken6q6bc5gyv2q/AABP_DVngSy1Ug9qw0V1dHvna?dl=0
 
 
 
