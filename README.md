@@ -1,7 +1,7 @@
 # QBB Puerto Rico 2016
-An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
+##An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
 
-By Diego Rivera Gelsinger, PhD Student in Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University
+##By Diego Rivera Gelsinger, PhD Student in [Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University](http://krieger2.jhu.edu/biology/labs/diruggiero/lab/index.html)
 
 #Things to do before class starts!
 
@@ -396,58 +396,6 @@ We will work with the transcriptome.gtf for downstream analysis.
 
 > Answer thought question: what does an RPKM/FPKM value of 0 mean? How do you asses this?
 
-
-Now that we have the individual transcriptomes for each sample, we have to compare each transcriptome against one another to get a consensus transcriptome. We want to make sure we count reads that fall under transcripts that are present in all of the transcriptomes to make sure we don't miss anything. To do this we will use a tool called `cuffcompare`, which is also packaged as `gffcompare`.
-
-First we will need to make an accession file that contains the paths to each stringtie-built transcriptome. You can open a text editor like so: `nano`
-
-In the text editor you want to have a line for each transcriptome. Your file should look similar to this when done:
-> `./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C1_stringout/HFX_C1_assemble_transcriptome_stringtie_out.gtf
-./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C2_stringout/HFX_C2_assemble_transcriptome_stringtie_out.gtf
-./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_C3_stringout/HFX_C3_assemble_transcriptome_stringtie_out.gtf
-./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_O1_stringout/HFX_O1_assemble_transcriptome_stringtie_out.gtf
-./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_O2_stringout/HFX_O2_assemble_transcriptome_stringtie_out.gtf
-./Desktop/QBB_Practice_Data/Transcript_assembly/stringtie_out/HFX_O3_stringout/HFX_O3_assemble_transcriptome_stringtie_out.gtf`
-
-To close the editor and save the file press `ctrl + x` --> press `y` to save --> name `gtf_acession_list.txt`
-
-Next to get a consensus trancriptome:
-
-**Merge transcriptomes**
-> `$ cuffcompare -o /home/manager/Desktop/QBB_Practice_Data/Quantitation/HFX_consensus_transcriptome_cuffcompare_output.gtf -i '/home/manager/Desktop/QBB_Practice_Data/Quantitation/gtf_acession_list.txt' -r '/home/manager/Desktop/QBB_Practice_Data/Reference_Genome_files/GCF_000025685.1_ASM2568v1_genomic.gff'`
-
-The output of this is a consensus transcriptome called `.combined.gtf` With the `r` option we compared out individual transcriptomes against the reference gene annotation, which gave a category code for each assembled transcript based on the relationship it has with the reference gene annotation. For example, if an assembled transcript STRG.1 matches a reference annotation it will be given a category code of "=". 
-
-A cheatsheat for category markers:
-> Class codes:
-
-> "u" is novel intergenic trancscript, (you may check that whether some of them could be expressing retro-viral elements).
-
-> "i" is intronic transcript (there are some intronic lncRNA and repetitive elements get expressed in cell-type specific manner)
-
-> "j"  is potential novel isoform (alternately spliced, since has no splice site match, you might check the coding potential)
-
-> "x" is cis-antisense transcript (exonic overlap but opposite strand)
-
-> "o" is "other overlap" - that is an exonic overlap with the reference transcript that doesn't fall in any other, "more interesting" overlap categories - e.g. no splice sites match ('j' class), no containment ('c' code) etc. These 'o' codes could be assigned, for example, to assembled single-exon fragments that happen to overlap one of the terminal exons of a reference transcript (but not enough to make it "contained")
-
-> "p" is "polymerase run" - it's supposed to signal that the relative positioning of the transcripts to the reference transcript suggests a potential polymerase read-through downstream of the 3' UTRs of the reference.  ( I would ignore it)
-
-> "=" is complete match.
-
-> "e" is single exon transfag with some basepairs of intron retention ( could be premRNA contaminant)
-
-Since we are focused on reference gene expression, we will only work with assembled transcripts that have the category code "=". To pull out these transcripts from everything else we will use the command `awk`. `awk` is extremely useful, but a full explanation and demonstration of how it works is far beyond the scope of this workshop so please just have faith and execute the command:
-
-`$ awk '$22 ~ /=/ { print }' '/home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/Cuffcompare_out/HFX_consensus_transcriptome_cuffcompare_output.gtf.combined.gtf' > '/home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/Cuffcompare_out/HFX_genes.gtf'`
-
-> #Task #4
-> All of these tasks must be done for each individual alignment in order to compare the expression between samples. Your task now is to:
-
-> 1. How many genes were found in consensus?
-
-> 2. Advanced: How do you extract intergenic class code transcripts?
-
 ##_**Progress Monitor**_
 - [x] Module 1: Quality control of RNA-seq reads
 - [x] Module 2: RNA-seq alignment and quantitation
@@ -473,7 +421,7 @@ Rather than an FPKM normalized approach for D.E. analysis, we will do a raw read
 
 *Credit to Dr. Simon Anders for the image from his website: http://www-huber.embl.de/users/anders/HTSeq/doc/count.html*
 
-To count the reads you excute:
+To count the reads against your reference transcriptome you excute:
 
 > `$ python -m HTSeq.scripts.count -f bam -s reverse -i gene_name '/home/manager/Desktop/QBB_Practice_Data/RNA-seq_alignments/bam_files/namesorted/HFX_C1_rRNA_removed_alignment.namesorted.bam'  '/home/manager/Desktop/QBB_Practice_Data/Transcript_assembly/Cuffcompare_out/HFX_genes.gtf' > /home/manager/Desktop/QBB_Practice_Data/Differential_expression_analysis/Counts/HFX_C1_gene_counts.txt`
 
