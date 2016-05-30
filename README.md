@@ -1,5 +1,5 @@
 # Quantitative Biology Bootcamp (QBB) Puerto Rico 2016
-##An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
+##An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea. This guide was created as an invited workshop for Dr. Rafael Montalvo Rodriguez's laboratory at University of Puerto Rico Mayagüez and as a workshop for the Halophiles 2016 conference in San Juan, Puerto Rico (May 2016).
 
 ##By Diego Rivera Gelsinger, PhD Student in [Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University](http://krieger2.jhu.edu/biology/labs/diruggiero/lab/index.html)
 
