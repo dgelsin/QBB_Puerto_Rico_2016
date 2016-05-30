@@ -1,4 +1,4 @@
-# QBB Puerto Rico 2016
+# Quantitative Biology Bootcamp (QBB) Puerto Rico 2016
 ##An introduction to bioinformatics and a tutorial on RNA-seq analysis in halophilic Archaea.
 
 ##By Diego Rivera Gelsinger, PhD Student in [Dr. Jocelyne DiRuggiero's laboratory at Johns Hopkins University](http://krieger2.jhu.edu/biology/labs/diruggiero/lab/index.html)
